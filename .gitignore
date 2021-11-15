@@ -1,0 +1,6 @@
+**/node_modules/
+#ignore environments
+*.env-cmdrc
+*.env
+*.bak
+**/public/imgs/products  
