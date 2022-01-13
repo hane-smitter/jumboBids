@@ -7,9 +7,9 @@ import {
   getHighestAmountBidder,
   getLastBidder,
   getWinners,
-} from "../../controllers/admin/bids.js";
-import { validate } from "../../middlewares/validator/index.js";
-import { adminCheck } from '../../middlewares/auth.js';
+} from "../../../../controllers/admin/bids.js";
+import { validate } from "../../../../middlewares/validator/index.js";
+import { adminCheck } from '../../../../middlewares/auth.js';
 
 
 const router = express.Router();

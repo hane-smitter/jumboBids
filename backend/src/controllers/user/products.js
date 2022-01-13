@@ -1,6 +1,7 @@
 import fs from "fs";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
+import Hashids from "hashids";
 
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
@@ -11,7 +12,7 @@ export const getProducts = async (req, res, next) => {
   try {
     const products = await Product.find({})
       .sort([["createdAt", -1]])
-      .populate(["productbids", "productbidscount","category"]);
+      .populate(["productbids", "productbidscount", "category"]);
     /* .exec(function(error, bids) {
             if(error) throw error;
             console.log('here is the bids meen!!');
@@ -25,15 +26,31 @@ export const getProducts = async (req, res, next) => {
 };
 
 export const getBiddableProducts = async (req, res, next) => {
-  try {
-    const page = req.query.page || 1;
+  const hashids = new Hashids('', 8);
 
-    const LIMIT = 40;
-    const startIndex = (parseInt(page) - 1) * LIMIT; //get starting index of every page
-    const total = await ProductBidDetail.countDocuments({
+  try {
+    let { nextPageToken, prevPageToken, maxResults } = req.query;
+    maxResults = parseInt(maxResults);
+
+    const nextPage = parseInt(hashids.decode(nextPageToken).join(""));
+    const prevPage = parseInt(hashids.decode(prevPageToken).join(""));
+    const page = nextPage || prevPage || 1;
+    // const page = parseInt(req.query.page) || 1;
+
+    if (!maxResults) maxResults = 20;
+
+    const LIMIT = maxResults;
+    const SKIP = (page - 1) * LIMIT; //get starting index of every page
+    const totalResults = await ProductBidDetail.countDocuments({
       endTime: { $gt: new Date().toISOString() },
       status: "Active",
     });
+    const totalPages = Math.ceil(totalResults / LIMIT);
+    console.log("totla pages", totalPages)
+    console.log("pahe", page)
+
+    nextPageToken = hashids.encode((page + 1) < totalPages ? page + 1 : 1);
+    prevPageToken = hashids.encode((page - 1) > 0 ? page - 1 : 1);
 
     const match = new Object();
     if (req.query.category) {
@@ -43,51 +60,28 @@ export const getBiddableProducts = async (req, res, next) => {
     if (req.query.search) {
       const search = new RegExp(req.query.search, "i");
       match.name = search;
-      const biddableProducts = await ProductBidDetail.find({
-        endTime: { $gt: new Date().toISOString() },
-        status: "Active"
-      })
-        .populate({
-          path: "product",
-          match,
-        })
-        .sort([["endTime", 1]])
-        .limit(LIMIT)
-        .skip(startIndex);
-        res.json({
-          data: biddableProducts,
-          currentPage: Number(page),
-          numberOfPages: Math.ceil(total / LIMIT),
-        });
-    } else {
-      const biddableProducts = await ProductBidDetail.find({
-        endTime: { $gt: new Date().toISOString() },
-        status: "Active",
-      })
-        .populate({
-          path: "product",
-          match,
-        })
-        .sort([["endTime", 1]])
-        .limit(LIMIT)
-        .skip(startIndex);
-      res.json({
-        data: biddableProducts,
-        currentPage: Number(page),
-        numberOfPages: Math.ceil(total / LIMIT),
-      });
-      // const biddableProducts = await ProductBidDetail.find({
-      //   endTime: { $gt: new Date().toISOString() },
-      //   status: "Active",
-      // })
-      //   .populate({
-      //     path: "product",
-      //     match,
-      //   })
-      //   .sort([["endTime", 1]]);
     }
-
-    // res.json(biddableProducts);
+    const biddableProducts = await ProductBidDetail.find({
+      endTime: { $gt: new Date().toISOString() },
+      status: "Active",
+    })
+      .populate({
+        path: "product",
+        match,
+      })
+      .sort([["endTime", 1]])
+      .limit(LIMIT)
+      .skip(SKIP);
+    res.json({
+      data: biddableProducts,
+      pageInfo: {
+        currentPage: page,
+        totalResults,
+        numberOfPages: totalPages,
+      },
+      nextPageToken,
+      prevPageToken,
+    });
   } catch (err) {
     next(err);
   }

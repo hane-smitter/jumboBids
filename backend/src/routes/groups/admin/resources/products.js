@@ -1,8 +1,8 @@
 import express from "express";
 
-import { upload } from "../../middlewares/productupload.js";
-import { validate } from "../../middlewares/validator/index.js";
-import { adminCheck } from '../../middlewares/auth.js';
+import { upload } from "../../../../middlewares/productupload.js";
+import { validate } from "../../../../middlewares/validator/index.js";
+import { adminCheck } from "../../../../middlewares/auth.js";
 
 import {
   createProduct,
@@ -12,20 +12,16 @@ import {
   getBiddableProducts,
   deleteProduct,
   updateProduct,
-} from "../../controllers/admin/products.js";
+} from "../../../../controllers/admin/products.js";
 
 const router = express.Router();
 
-// router.use(adminCheck);
+router.use(adminCheck);
 
 router
   .route("/")
   .get(getProducts)
-  .post(
-    upload.single("productimg"),
-    validate("createProduct"),
-    createProduct
-  );
+  .post(upload.single("productimg"), validate("createProduct"), createProduct);
 
 router.post(
   "/bid/create",

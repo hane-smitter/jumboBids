@@ -8,9 +8,9 @@ import {
   forgotPassword,
   login,
   register,
-} from "../../controllers/admin/auth.js";
-import { getDashboardData } from "../../controllers/admin/dashboard.js";
-import { adminCheck } from "../../middlewares/auth.js";
+} from "../../../../controllers/admin/auth.js";
+import { getDashboardData } from "../../../../controllers/admin/dashboard.js";
+import { adminCheck } from "../../../../middlewares/auth.js";
 
 const router = express.Router();
 
