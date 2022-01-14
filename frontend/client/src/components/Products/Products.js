@@ -14,10 +14,10 @@ import {
   List,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-import CategoryIcon from "@material-ui/icons/Category";
+} from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import CategoryIcon from "@mui/icons-material/Category";
 import { decode } from "html-entities";
 
 import SearchBar from "material-ui-search-bar";
@@ -45,7 +45,7 @@ const Products = () => {
     }
   }, []);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <div align="center" className={classes.borderBlue}>
       <Box className={classes.productsTitleBox}>

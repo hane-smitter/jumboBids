@@ -2,10 +2,10 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
+  Routes,
 } from "react-router-dom";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
+import { CssBaseline } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import Home from "./components/Home";
 import Form from './components/Form/Form';
@@ -26,20 +26,20 @@ const easyBg = createTheme({
 
 const App = () => {
   return (
-    <MuiThemeProvider theme={easyBg}>
-      {/* <CssBaseline /> */}
+    <ThemeProvider theme={easyBg}>
+      <CssBaseline />
     <Router>
-      <Switch>
-        <Route exact path="/" component={Home} />
+      <Routes>
+        <Route path="/" component={Home} />
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
         <Route path="/faqs" component={Faqs} />
         <Route path="/pastbids" component={PastBids} />
         <Route path="/product/create" component={Form} />
         <Route path="/detail" component={Detail} />
-      </Switch>
+      </Routes>
     </Router>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };
 

@@ -1,7 +1,6 @@
 import fs from "fs";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
-import Hashids from "hashids";
 
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
@@ -26,32 +25,22 @@ export const getProducts = async (req, res, next) => {
 };
 
 export const getBiddableProducts = async (req, res, next) => {
-  const hashids = new Hashids('', 8);
+  const handlePaginate = req.handlePaginate;
+  const { nextPageToken, prevPageToken, maxResults } = req.query;
 
   try {
-    let { nextPageToken, prevPageToken, maxResults } = req.query;
-    maxResults = parseInt(maxResults);
-
-    const nextPage = parseInt(hashids.decode(nextPageToken).join(""));
-    const prevPage = parseInt(hashids.decode(prevPageToken).join(""));
-    const page = nextPage || prevPage || 1;
-    // const page = parseInt(req.query.page) || 1;
-
-    if (!maxResults) maxResults = 20;
-
-    const LIMIT = maxResults;
-    const SKIP = (page - 1) * LIMIT; //get starting index of every page
-    const totalResults = await ProductBidDetail.countDocuments({
+    const itemCount = await ProductBidDetail.countDocuments({
       endTime: { $gt: new Date().toISOString() },
       status: "Active",
     });
-    const totalPages = Math.ceil(totalResults / LIMIT);
-    console.log("totla pages", totalPages)
-    console.log("pahe", page)
 
-    nextPageToken = hashids.encode((page + 1) < totalPages ? page + 1 : 1);
-    prevPageToken = hashids.encode((page - 1) > 0 ? page - 1 : 1);
-
+    const paginationConfig = {
+      totalResults: itemCount,
+      nextPage: nextPageToken,
+      prevPage: prevPageToken,
+      maxResults,
+    };
+    const {limit, skip, pageData} = handlePaginate.apply(paginationConfig);
     const match = new Object();
     if (req.query.category) {
       let category = req.query.category;
@@ -70,17 +59,11 @@ export const getBiddableProducts = async (req, res, next) => {
         match,
       })
       .sort([["endTime", 1]])
-      .limit(LIMIT)
-      .skip(SKIP);
+      .limit(limit)
+      .skip(skip);
     res.json({
       data: biddableProducts,
-      pageInfo: {
-        currentPage: page,
-        totalResults,
-        numberOfPages: totalPages,
-      },
-      nextPageToken,
-      prevPageToken,
+      ...pageData,
     });
   } catch (err) {
     next(err);

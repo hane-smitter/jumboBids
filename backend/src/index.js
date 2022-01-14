@@ -7,6 +7,7 @@ import https from "https";
 import cron from "node-cron";
 import chalk from "chalk";
 import { fileURLToPath } from "url";
+import compression from "compression";
 
 import { DB } from "./db/mongoose.js";
 import routes from "./routes/index.js";
@@ -25,6 +26,7 @@ var options = {
 
 const app = express();
 
+app.use(compression());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ limit: "30mb", extended: true }));

@@ -9,8 +9,7 @@ import {
     Paper,
     useTheme,
     useMediaQuery
-} from '@material-ui/core';
-import ChipInput from 'material-ui-chip-input';
+} from '@mui/material';
 
 import { getProducts } from '../../actions/products';
 import Users from '../Users/Users.js';
@@ -40,7 +39,7 @@ const Home = () => {
     //     dispatch(getProducts());
     // }, [dispatch]);
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const Cont = () => {
         return (
             <span>

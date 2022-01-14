@@ -1,6 +1,6 @@
 import React from "react";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import { Snackbar } from "@material-ui/core";
+import { Alert, AlertTitle } from '@mui/material';
+import { Snackbar } from "@mui/material";
 
 const ShowFeedback = ({
   alertOpen,

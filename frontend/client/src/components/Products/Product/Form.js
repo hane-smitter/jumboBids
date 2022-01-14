@@ -3,8 +3,8 @@ import {
   Button,
   TextField,
   CircularProgress
-} from "@material-ui/core";
-import { useHistory } from 'react-router-dom';
+} from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import useStyles from "./styles";
@@ -30,7 +30,7 @@ const location = {
 */
 
 const BidForm = ({product}) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const classes = useStyles();
     

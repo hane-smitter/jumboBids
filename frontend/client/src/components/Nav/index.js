@@ -19,17 +19,17 @@ import {
   Avatar,
   Divider,
   SwipeableDrawer
-} from "@material-ui/core";
+} from "@mui/material";
 import decode from 'jwt-decode';
 import * as actionType from '../../constants';
 
-import MenuIcon from "@material-ui/icons/Menu";
-import HomeIcon from "@material-ui/icons/Home";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
 
 import useStyles from './styles';
 import Logo from '../../images/smoke.png';
 import Kenya from '../../images/kenya.png';
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchBar from "material-ui-search-bar";
 import { alpha, fabClasses } from "@mui/material";
 import InputBase from '@mui/material/InputBase';
@@ -43,7 +43,7 @@ import { useLocation } from "react-router";
 import { unsetErr, unsetStatus } from "../../actions/errors";
 import ShowFeedback from "../utils/ShowFeedback";
 import { batch, useDispatch, useSelector } from "react-redux";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { Alert, AlertTitle } from '@mui/material';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -57,12 +57,13 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import LockIcon from '@mui/icons-material/Lock';
 import { Timer } from "./Timer";
 import { getProducts } from "../../actions/products";
+import { authService } from "../../api/authService";
 
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    const [user, setUser] = useState(authService.getProfile());
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
     const location = useLocation();
     
     const [state, setState] = React.useState({
@@ -87,7 +88,7 @@ const Nav = () => {
     const logout = () => {
       dispatch({ type: actionType.LOGOUT });
   
-      history.push('/');
+      navigate('/');
   
       setUser(null);
     };
@@ -101,7 +102,7 @@ const Nav = () => {
         if (decodedToken.exp * 1000 < new Date().getTime()) logout();
       }
   
-      setUser(JSON.parse(localStorage.getItem('profile')));
+      setUser(authService.getProfile());
     }, [location]);
 
     const Search = styled('div')(({ theme }) => ({
@@ -228,7 +229,7 @@ const Nav = () => {
   };
   //responsive
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   //drawer
   const list = (anchor) => (
     <Box
@@ -321,7 +322,7 @@ const Nav = () => {
         </MenuItem>
       </Menu>*/}
 
-      <Link to="/"><img alignItems="center" src={Logo} sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }} className={classes.image,classes.position} /></Link>
+      <Link to="/"><img alignItems="center" src={Logo} sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }} className={(classes.image, classes.position)} /></Link>
       <SearchBar
       className={classes.sb}
           value={searchItem}

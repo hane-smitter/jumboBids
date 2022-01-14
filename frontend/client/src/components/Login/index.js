@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CircularProgress, Container, Grid, Box, useMediaQuery, useTheme } from "@material-ui/core";
+import { CircularProgress, Container, Grid, Box, useMediaQuery, useTheme } from "@mui/material";
 import { useLocation } from "react-router";
 import { motion } from "framer-motion";
 import { batch, useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,7 @@ const Detail = () => {
   const classes = useStyles();
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
   useEffect(() => {
     return () => {

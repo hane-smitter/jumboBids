@@ -17,10 +17,10 @@ import {
   CardHeader,
   Card,
   Link,
-} from "@material-ui/core";
+} from "@mui/material";
 import { batch, useDispatch, useSelector } from "react-redux";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import ImageIcon from "@material-ui/icons/Image";
+import { Alert, AlertTitle } from '@mui/material';
+import ImageIcon from "@mui/icons-material/Image";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
 
@@ -31,7 +31,7 @@ import useStyles from "./styles.js";
 import { createUser, sendOtp } from "../../actions/users.js";
 import { useLocation } from "react-router";
 import { array } from "yup/lib/locale";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -47,11 +47,11 @@ const Form = () => {
   const [idCode, setCode] = useState('3902');
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const locationRouter = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   //show rest of form for otp ver
   const handleSetVerify = () => {
-    // dispatch(sendOtp(formFields, history));
+    // dispatch(sendOtp(formFields, navigate));
       setVerify(true);
   };
   //submit

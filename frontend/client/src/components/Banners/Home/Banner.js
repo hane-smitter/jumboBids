@@ -11,7 +11,7 @@ import p1 from '../../../images/products/AustralianPassion.jpeg';
 import p2 from '../../../images/products/Chardonnay.jpeg';
 import p3 from '../../../images/products/chivas1ltr.jpeg';
 import p4 from '../../../images/products/jb1liter.jpeg';
-import { Card, CardMedia, Typography, useMediaQuery, useTheme } from "@material-ui/core";
+import { Card, CardMedia, Typography, useMediaQuery, useTheme } from "@mui/material";
 import useStyles from "./styles.js";
 
 const breakPoints = [
@@ -24,7 +24,7 @@ const breakPoints = [
 const BannerFile = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const slider1 = isMobile ? ms1 : s1
   const slider2 = isMobile ? ms2 : s2
   

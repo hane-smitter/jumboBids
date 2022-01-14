@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Pagination, PaginationItem } from '@material-ui/lab';
+import { Pagination } from '@mui/material';
+import { PaginationItem } from '@mui/lab';
 import { Link } from 'react-router-dom';
 
 import { getProducts } from "../actions/products";

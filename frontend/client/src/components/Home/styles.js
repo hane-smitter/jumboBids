@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles( (theme) => ({
         bg: {
@@ -11,7 +11,7 @@ export default makeStyles( (theme) => ({
             padding: '16px',
           },
           gridContainer: {
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
               flexDirection: 'column-reverse',
             },
           },

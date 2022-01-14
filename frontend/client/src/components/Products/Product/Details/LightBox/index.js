@@ -10,7 +10,7 @@ import {
     Box,
     Divider,
     Button,
-  } from "@material-ui/core";
+  } from "@mui/material";
 
 import FutureTimeCalc from "../../../../utils/FutureTimeCalc";
 import useStyles from './style';

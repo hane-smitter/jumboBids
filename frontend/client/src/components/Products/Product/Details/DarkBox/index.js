@@ -13,10 +13,10 @@ import {
   CardContent,
   Card,
   ListItemText,
-} from "@material-ui/core";
+} from "@mui/material";
 import { batch, useDispatch, useSelector } from "react-redux";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import ImageIcon from "@material-ui/icons/Image";
+import { Alert, AlertTitle } from '@mui/material';
+import ImageIcon from "@mui/icons-material/Image";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
 

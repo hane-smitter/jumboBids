@@ -1,8 +1,8 @@
-import { Button, Grid, Paper } from '@material-ui/core';
+import { Button, Grid, Paper } from '@mui/material';
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import banner_img from '../../../images/slider1.png';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 import useStyles from './styles';
 import BannerFile from './Banner';
 
