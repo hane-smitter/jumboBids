@@ -30,13 +30,13 @@ const App = () => {
       <CssBaseline />
     <Router>
       <Routes>
-        <Route path="/" component={Home} />
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <Route path="/faqs" component={Faqs} />
-        <Route path="/pastbids" component={PastBids} />
-        <Route path="/product/create" component={Form} />
-        <Route path="/detail" component={Detail} />
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/faqs" element={<Faqs />} />
+        <Route path="/pastbids" element={<PastBids />} />
+        <Route path="/product/create" element={<Form />} />
+        <Route path="/detail" element={<Detail />} />
       </Routes>
     </Router>
     </ThemeProvider>

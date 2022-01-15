@@ -20,7 +20,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CategoryIcon from "@mui/icons-material/Category";
 import { decode } from "html-entities";
 
-import SearchBar from "material-ui-search-bar";
+// import SearchBar from "material-ui-search-bar";
 import Product from "./Product/Product";
 import useStyles from "./styles";
 import { getProducts } from "../../actions/products";
@@ -111,7 +111,7 @@ const Products = () => {
           {!isMobile && (
           <Grid item style={{ flexGrow: 1 }} xs={12} sm={4}>
             <Typography>
-              <SearchBar
+              {/* <SearchBar
                 value={searchItem}
                 onChange={(value) => {
                   setCategoryOpen(false);
@@ -136,7 +136,7 @@ const Products = () => {
                   backgroundColor:'#fff',
                   color:'#222',
                 }}
-              />
+              /> */}
             </Typography>
           </Grid>
           )}

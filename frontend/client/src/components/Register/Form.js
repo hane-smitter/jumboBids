@@ -309,7 +309,7 @@ const Form = () => {
                 function shouldClearForm() {
                     actions.resetForm();
                 }
-                submitForm(values, history)
+                submitForm(values)
                 window.shouldClearForm = shouldClearForm;
                 
                 

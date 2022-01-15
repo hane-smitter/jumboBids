@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ReactDOM from "react-dom";
-import Carousel from "react-elastic-carousel";
+// import Carousel from "react-elastic-carousel";
 import Item from "./Item";
 import "./styles.css";
 import s1 from '../../../images/slider1.png';
@@ -58,8 +58,7 @@ const BannerFile = () => {
         };
   return (
     <div className="App" style={{ marginTop: "100px" }}>
-      {/* <div className="carousel-wrapper"> */}
-        <Carousel breakPoints={breakPoints} pagination={false} enableAutoPlay={true} showArrows={false} easing="fadeIn 5s" transitionMs={700}
+        {/* <Carousel breakPoints={breakPoints} pagination={false} enableAutoPlay={true} showArrows={false} easing="fadeIn 5s" transitionMs={700}
         ref={carouselRef}
         onNextEnd={({ index }) => {
               clearTimeout(resetTimeout)
@@ -78,8 +77,7 @@ const BannerFile = () => {
            }}
            />
           ))}
-        </Carousel>
-      {/* </div> */}
+        </Carousel> */}
     </div>
   );
 }

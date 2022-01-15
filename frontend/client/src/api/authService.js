@@ -1,5 +1,5 @@
 const authService = {
-  get getProfile() {
+  getProfile() {
     return JSON.parse(localStorage.getItem('profile'));
   },
   /* set c(x) {

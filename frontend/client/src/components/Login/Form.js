@@ -171,7 +171,7 @@ const Form = () => {
                 function shouldClearForm() {
                     actions.resetForm();
                 }
-                dispatch(loginUser(values, history))
+                dispatch(loginUser(values))
                 window.shouldClearForm = shouldClearForm;
                 
                 
