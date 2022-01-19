@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 import { motion } from "framer-motion";
 import { batch, useDispatch, useSelector } from "react-redux";
 
-import Navbar from "../../../Nav";
+import Navbar from "../../../Header";
 import useStyles from "./styles.js";
 import { getProducts } from "../../../../actions/products";
 import LightBox from "./LightBox";

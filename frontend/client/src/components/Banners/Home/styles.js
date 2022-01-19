@@ -1,100 +1,40 @@
-import makeStyles from '@mui/styles/makeStyles';
-import Background from '../../../images/bannerbg.png';
+import { styled } from "@mui/system";
+import { Box } from "@mui/material";
 
-export default makeStyles(() => ({
-    root: {
-        backgroundColor: '#2b5681',
-        fontFamily:'Open Sans',
-    },
-    imgContainer: {
-        // backgroundImage: `url(${Background})`,
-        backgroundPosition: 'center',
-        backgroundSize: 'contain',
-        backgroundRepeat: 'yes',
-        height: '200px',
-        // marginBlockEnd: '20px',
-        // borderBottomLeftRadius: '50%',
-        // borderBottomRightRadius: '60%',
-        marginBlockStart:'-100px',
-        backgroundColor:'transparent',
-        width:'100%'
-    },
-    imgContainerMobi: {
-        backgroundPosition: 'center',
-        backgroundSize: 'contain',
-        backgroundRepeat: 'yes',
-        height: 'auto',
-        // marginBlockEnd: '20px',
-        // borderBottomLeftRadius: '50%',
-        // borderBottomRightRadius: '60%',
-        marginBlockStart:'-60px',
-        backgroundColor:'#2b5681',
-        width:'100%'
-    },
-    image: {
-        width: '100%',
-        height: '200px',
-        display: 'block',
-        // // borderRadius: '10px',
-        backgroundSize:'contain'
-    },
-    ribbon: {
-        textOverflow: 'ellipsis',
-        position: 'relative',
-        top: '0%',
-        float:'right',
-        alignItems:'right',
-        padding: '10px',
-        backgroundColor: 'red',
-        color: 'white',
-        opacity: '0.8',
-        maxWidth: 'auto',
-        height: '7%',
-        fontSize: '18px',
-        fontWeight: '600',
-        transition: '300ms',
-        cursor: 'pointer',
-        '&::before': {
-        },
-    },
-    ribbon2: {
-        textOverflow: 'ellipsis',
-        position: 'relative',
-        bottom: '-55%',
-        float:'right',
-        alignItems:'right',
-        padding: '10px',
-        backgroundColor: 'red',
-        margin:0,
-        color: 'white',
-        opacity: '0.8',
-        maxWidth: 'auto',
-        height: '7%',
-        fontSize: '18px',
-        fontWeight: '600',
-        '&::before': {
-            content: ' ',
-            position: 'absolute',
-            width: '30px',
-            height: 0,
-            left: '-30px',
-            top: '12px',
-            borderWidth: '20px 10px',
-            borderStyle: 'solid',
-            borderColor: '#999 #999 #999 transparent',
-        },
-    },
-    ribbon3: {
-        textOverflow: 'ellipsis',
-        position: 'relative',
-        bottom: '-25%',
-        float:'right',
-        backgroundColor: 'whitesmoke',
-        color: 'black',
-        opacity: '0.8',
-        maxWidth: 'auto',
-        height: '7%',
-        fontSize: '12px',
-        transition: '300ms',
-    },
-}));
+const BannerCont = styled(Box)`
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 400px;
+`;
+const BannerImg = styled(Box)`
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: grab;
+`;
+
+const ArrowCont = styled("div")`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 1);
+  transition: ${({theme}) => theme.transitions.create(["background-color"], {
+    duration: theme.transitions.duration.standard,
+  })};
+  border-radius: 50%;
+  filter: drop-shadow(0 0 12px #333);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  z-Index: 2;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.85);
+  }
+`;
+
+export default { BannerImg, BannerCont, ArrowCont };

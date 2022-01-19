@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 import { motion } from "framer-motion";
 import { batch, useDispatch, useSelector } from "react-redux";
 
-import Navbar from "../Nav";
+import Navbar from "../Header";
 import useStyles from "./styles.js";
 import Footer from "../Footer";
 import { unsetErr, unsetStatus } from "../../actions/errors";
