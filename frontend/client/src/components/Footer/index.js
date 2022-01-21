@@ -121,7 +121,7 @@ function Footer() {
       <Divider variant="middle" component="hr" sx={{ bgcolor: "common.white" }} />
       <Toolbar>
         <Typography variant="body1" className={classes.center} color="inherit">
-          Copyright © {new Date().getFullYear()} bidspesa limited. &nbsp;&nbsp;All rights reserved ®
+          Copyright © {new Date().getFullYear()} JumboBids limited. &nbsp;&nbsp;All rights reserved ®
         </Typography>
       </Toolbar>
     </Container>

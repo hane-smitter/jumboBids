@@ -1,6 +1,7 @@
 import React from "react";
 import { Grow } from "@mui/material";
 import { styled } from "@mui/system";
+import { Outlet } from "react-router-dom";
 
 import Header from "../Header";
 import Footer from "../Footer";
@@ -14,15 +15,17 @@ const Container = styled("div")(({ theme }) => ({
 const ContentContainer = styled("div")`
   width: 100%;
   padding-inline: ${({ theme }) => theme.spacing(2)};
-  background-color: ${({theme}) => theme.palette.primary.main};
+  background-color: ${({ theme }) => theme.palette.primary.main};
 `;
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
     <Grow in>
       <Container>
         <Header />
-        <ContentContainer>{children}</ContentContainer>
+        <ContentContainer>
+          <Outlet />
+        </ContentContainer>
         <Footer />
       </Container>
     </Grow>

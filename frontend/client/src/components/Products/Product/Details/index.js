@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Grid } from "@mui/material";
 import { useLocation } from "react-router";
-import { motion } from "framer-motion";
 import { batch, useDispatch, useSelector } from "react-redux";
 
-import Navbar from "../../../Header";
 import useStyles from "./styles.js";
 import { getProducts } from "../../../../actions/products";
 import LightBox from "./LightBox";
@@ -20,8 +18,8 @@ const Detail = () => {
   const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const locationRouter = useLocation();
-  let initialProduct = locationRouter.state.product;
-  const [product, setProduct] = useState(initialProduct);
+  let focusItem = locationRouter.state.product;
+  const [product, setProduct] = useState(focusItem);
   const classes = useStyles();
   function rehydrateProducts() {
     dispatch(getProducts(undefined, updateProduct));
@@ -58,68 +56,37 @@ const Detail = () => {
   //   updateProduct();
   // }, [products]);
 
-
   return (
     <>
-      <Container maxwidth="lg">
-        <ShowFeedback
-          alertOpen={alertOpen}
-          setAlertOpen={setAlertOpen}
-          severity={status?.info?.severity}
-          msg={status?.info?.message}
-        />
-        {err.length > 0 &&
-          err.map((error) => (
-            <ShowFeedback
-              alertOpen={errAlertOpen}
-              setAlertOpen={setErrAlertOpen}
-              severity={"error"}
-              msg={error.msg}
-              title="Ooops!"
-            />
-          ))}
+      <ShowFeedback
+        alertOpen={alertOpen}
+        setAlertOpen={setAlertOpen}
+        severity={status?.info?.severity}
+        msg={status?.info?.message}
+      />
+      {err.length > 0 &&
+        err.map((error) => (
+          <ShowFeedback
+            alertOpen={errAlertOpen}
+            setAlertOpen={setErrAlertOpen}
+            severity={"error"}
+            msg={error.msg}
+            title="Ooops!"
+          />
+        ))}
 
-        {/* <motion.div
-          style={nav}
-          variants={navVariants}
-          initial="hidden"
-          animate="visible"
-          exit="leave"
-        > */}
-          <Navbar />
-        {/* </motion.div> */}
+      <Grid container>
+        <Grid item xs={12} md={3} className={classes.flex}>
+          <LightBox product={product} />
+        </Grid>
 
-        <Container maxwidth="lg" className={classes.wrapperContainer}>
-          <Grid container>
-            <Grid
-              item
-              xs={12}
-              md={3}
-              className={classes.flex}
-            >
-              <LightBox product={product} />
-            </Grid>
-            
-            <Grid
-              item
-              xs={12}
-              md={5}
-              className={classes.flex}
-            >
-              <BiddersBox product={product} />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={4}
-              className={classes.flex}
-            >
-              <DarkBox updateProducts={rehydrateProducts} product={product} />
-            </Grid>
-          </Grid>
-        </Container>
-        <Footer />
-      </Container>
+        <Grid item xs={12} md={5} className={classes.flex}>
+          <BiddersBox product={product} />
+        </Grid>
+        <Grid item xs={12} md={4} className={classes.flex}>
+          <DarkBox updateProducts={rehydrateProducts} product={product} />
+        </Grid>
+      </Grid>
     </>
   );
 };

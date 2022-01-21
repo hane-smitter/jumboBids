@@ -54,55 +54,15 @@ const App = () => {
       <CssBaseline />
       <Router>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Layout>
-                <Home />
-              </Layout>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <Layout>
-                <Register />
-              </Layout>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <Layout>
-                <Login />
-              </Layout>
-            }
-          />
-          <Route
-            path="/faqs"
-            element={
-              <Layout>
-                <Faqs />
-              </Layout>
-            }
-          />
-          <Route
-            path="/pastbids"
-            element={
-              <Layout>
-                <PastBids />
-              </Layout>
-            }
-          />
-          <Route path="/product/create" element={<Form />} />
-          <Route
-            path="/detail"
-            element={
-              <Layout>
-                <Detail />
-              </Layout>
-            }
-          />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="register" element={<Register />} />
+            <Route path="login" element={<Login />} />
+            <Route path="faqs" element={<Faqs />} />
+            <Route path="pastbids" element={<PastBids />} />
+            <Route path="product/create" element={<Form />} />
+            <Route path="detail" element={<Detail />} />
+          </Route>
         </Routes>
       </Router>
     </ThemeProvider>

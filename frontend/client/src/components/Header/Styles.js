@@ -9,7 +9,7 @@ const RouteLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #ffffff;
   font-size: 14px;
   padding-inline: 10px;
   height: 100%;
@@ -23,10 +23,6 @@ const RouteLink = styled(Link)`
   }
 `;
 const Btn = styled(Button)(({ theme, search, signin }) => ({
-  // backgroundColor: standard
-  //   ? theme.palette.primary.main
-  //   : theme.palette.secondary.main,
-  // color: "#333333",
   textTransform: "capitalize",
   marginInline: "10px",
   transition: "background-color 200ms ease-in",

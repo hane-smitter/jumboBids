@@ -12,7 +12,6 @@ import MobileDrawer from "./MobileDrawer";
 const Header = () => {
   const lgScreen = useMediaQuery((theme) => theme.breakpoints.up("md"));
   const [openMenu, setOpenMenu] = useState(false);
-  console.log("islargeScreen", lgScreen);
   return (
     <header>
       <Styles.StackCont direction="row" spacing={2}>

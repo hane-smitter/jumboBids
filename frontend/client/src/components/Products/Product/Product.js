@@ -1,18 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Typography,
-  TextField,
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress,
-} from "@mui/material";
+import { CardContent, Tooltip, CardMedia } from "@mui/material";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Formik, Field, Form } from "formik";
@@ -21,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { makeBid, fetchTopBidder } from "../../../actions/products";
 import { unsetErr } from "../../../actions/errors";
 import useStyles from "./styles";
+import Styled from "./Styless";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
-import FutureTimeCalc from "../../utils/FutureTimeCalc";
 import MoneyFormat from "../../utils/MoneyFormat/index.js";
 import BidForm from "./Form";
 import ProductDetail from "./ProductDetail";
@@ -49,38 +36,42 @@ const Product = ({ product }) => {
   };
 
   return (
-    <Card
-      className={(classes.root, classes.borderBlack)}
+    <Styled.CardRoot
+      // className={(classes.root, classes.borderBlack)}
       component={motion.div}
       variants={cardVariants}
     >
-      <CardHeader
-        className={classes.capitalize}
-        color="primary"
-        subheader={
-          product.product.name.length > 20
-            ? product.product.name.substr(0, 20) + "..."
-            : product.product.name
-        }
-      />
-      <CardActionArea>
-        <Link to={location}>
-          <CardMedia
-            className={classes.media}
-            image={product.product.image || defaultImg}
-            title={product.product.name}
-          />
-        </Link>
-      </CardActionArea>
-      <CardContent className={classes.darkBox}>
-        {/* product details */}
-        <ProductDetail product={product} />
-        {/* product details */}
-        {/* form */}
-        <BidForm product={product} />
-        {/* .end of form */}
-      </CardContent>
-    </Card>
+      <Styled.SectionImage>
+        {/* <Link to={location}> */}
+        <CardMedia
+          // className={classes.media}
+          component="img"
+          src={product.product.image || defaultImg}
+          alt={product.product.name}
+        />
+        {/* </Link> */}
+      </Styled.SectionImage>
+      <Styled.SectionContent>
+        <CardContent sx={{ padding: 0 }}>
+          <Tooltip title={product.product.name} placement="top-start">
+            <Styled.CardHeading
+              disableTypography
+              subheader={
+                <Styled.CardHeadingText variant="body2">
+                  {product.product.name.length > 60 ?
+                  product.product.name.substr(0, 20) + "..." :
+                  product.product.name}
+                </Styled.CardHeadingText>
+              }
+            />
+          </Tooltip>
+          {/* product details */}
+          <ProductDetail product={product} />
+          {/* product details form */}
+          {/* <BidForm product={product} /> */}
+        </CardContent>
+      </Styled.SectionContent>
+    </Styled.CardRoot>
   );
 };
 
