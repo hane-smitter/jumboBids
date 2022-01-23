@@ -23,8 +23,8 @@ import { decode } from "html-entities";
 // import SearchBar from "material-ui-search-bar";
 import Product from "./Product/Product";
 import useStyles from "./styles";
-import { getProducts } from "../../actions/products";
-import { unsetErr } from "../../actions/errors";
+import { getProducts } from "../../redux/actions/products";
+import { unsetErr } from "../../redux/actions/errors";
 
 const Products = () => {
   const dispatch = useDispatch();

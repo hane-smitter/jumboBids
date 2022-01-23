@@ -24,11 +24,11 @@ import ImageIcon from "@mui/icons-material/Image";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
 
-import { unsetErr, unsetStatus } from "../../actions/errors";
+import { unsetErr, unsetStatus } from "../../redux/actions/errors";
 import ShowFeedback from "../utils/ShowFeedback";
 
 import useStyles from "./styles.js";
-import { createUser, sendOtp } from "../../actions/users.js";
+import { createUser, sendOtp } from "../../redux/actions/users.js";
 import { useLocation } from "react-router";
 import { array } from "yup/lib/locale";
 import { useNavigate } from "react-router-dom";

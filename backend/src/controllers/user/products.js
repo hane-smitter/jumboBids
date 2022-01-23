@@ -6,6 +6,7 @@ import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
 import Category from "../../models/Category.js";
 import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
+import Bid from "../../models/Bid.js";
 
 export const getProducts = async (req, res, next) => {
   try {
@@ -40,7 +41,7 @@ export const getBiddableProducts = async (req, res, next) => {
       prevPage: prevPageToken,
       maxResults,
     };
-    const {limit, skip, pageData} = handlePaginate.apply(paginationConfig);
+    const { limit, skip, pageData } = handlePaginate.apply(paginationConfig);
     const match = new Object();
     if (req.query.category) {
       let category = req.query.category;
@@ -64,6 +65,56 @@ export const getBiddableProducts = async (req, res, next) => {
     res.json({
       data: biddableProducts,
       ...pageData,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getBiddableProductDetails = async (req, res, next) => {
+  try {
+    const { bidDetailsId, productId } = req.params;
+
+    const highestBidder = Bid.findOne(
+      {
+        product: mongoose.Types.ObjectId(productId),
+      },
+      "-bidAmount -_id"
+    )
+      .populate("user", "-updatedAt -_id")
+      .sort("-bidAmountTotal");
+
+    const topActiveBidders = Bid.find(
+      {
+        product: mongoose.Types.ObjectId(productId),
+      },
+      "-updatedAt -_id -bidAmount"
+    )
+      .populate("user", "-createdAt -updatedAt -_id")
+      .limit(5)
+      .sort("-bidsCount");
+    const biddableProductDetails = ProductBidDetail.find(
+      {
+        _id: bidDetailsId,
+        endTime: { $gt: new Date().toISOString() },
+        status: "Active",
+      },
+      "-status"
+    ).populate({
+      path: "product",
+    });
+    const collectiveDetails = await Promise.all([
+      biddableProductDetails,
+      highestBidder,
+      topActiveBidders,
+    ]);
+    const [product, ...biddersInfo] = collectiveDetails;
+    res.json({
+      product: product[0],
+      bidders: {
+        highestBidder: biddersInfo[0],
+        topActiveBidders: biddersInfo[1],
+      },
     });
   } catch (err) {
     next(err);

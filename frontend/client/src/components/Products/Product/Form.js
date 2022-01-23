@@ -9,8 +9,8 @@ import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import useStyles from "./styles";
 import { useDispatch, useSelector } from "react-redux";
-import { makeBid } from "../../../actions/products";
-import { unsetErr } from "../../../actions/errors";
+import { makeBid } from "../../../redux/actions/products";
+import { unsetErr } from "../../../redux/actions/errors";
 /* 
 <Link to={location}>
         <CardMedia

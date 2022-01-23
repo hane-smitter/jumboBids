@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 
-import { getProducts } from "../../actions/products";
+import { getProducts } from "../../redux/actions/products";
 import Users from "../Users/Users.js";
 import Navbar from "../Header";
 import Banner from "../Banners/Home";

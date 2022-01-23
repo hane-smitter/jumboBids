@@ -1,9 +1,10 @@
-import { AUTH,LOGOUT }from '../constants';
+import { storeService } from "../../api/storeService";
+import { AUTH, LOGOUT } from "../constants";
 
 const authReducer = (state = { authData: null }, action) => {
   switch (action.type) {
     case AUTH:
-      localStorage.setItem('profile', JSON.stringify({ ...action?.data }));
+      storeService.saveProfile = action.payload;
 
       return { ...state, authData: action.data, loading: false, errors: null };
     case LOGOUT:

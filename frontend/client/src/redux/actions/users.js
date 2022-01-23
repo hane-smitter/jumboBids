@@ -1,13 +1,13 @@
 import { batch } from "react-redux";
 import { Router } from "react-router-dom";
 
-import * as api from "../api";
+import * as api from "../../api";
 import {
   CREATEUSER,
   ERRORUSER,
   LOADINGUSER,
   STATUSUSER,
-  AUTH
+  AUTH,
 } from "../constants";
 
 //Action creators
@@ -16,16 +16,21 @@ export const createUser = (body, router) => async (dispatch) => {
     dispatch({ type: LOADINGUSER, payload: { status: 1 } });
     //create user
     const { data, status } = await api.createUser(body);
-    
+
     batch(() => {
-      dispatch({ type: LOADINGUSER, payload: { status: 0 } })
-      dispatch({ type: STATUSUSER, payload: { info: {
-        message: "Success! User registered.",
-        severity: "success",
-        code: "createUser"
-      } } });
+      dispatch({ type: LOADINGUSER, payload: { status: 0 } });
+      dispatch({
+        type: STATUSUSER,
+        payload: {
+          info: {
+            message: "Success! User registered.",
+            severity: "success",
+            code: "createUser",
+          },
+        },
+      });
       dispatch({ type: AUTH, payload: { user: data } });
-      router.push('/');
+      router.push("/");
     });
   } catch (error) {
     logError(error, dispatch);
@@ -35,33 +40,37 @@ export const createUser = (body, router) => async (dispatch) => {
 // loginUser
 export const loginUser = (body, router) => async (dispatch) => {
   try {
-    const { data } = await api.signIn(body);
-    dispatch({ type: AUTH, data });
+    const { data: payload } = await api.signIn(body);
+    dispatch({ type: AUTH, payload });
 
-    router.push('/');
+    router.push("/");
   } catch (error) {
     logError(error, dispatch);
   }
 };
 
 //send otp
-export const sendOtp = (body) => async(dispatch) => {
+export const sendOtp = (body) => async (dispatch) => {
   try {
-    const { data, status } = await api.sendOtp(body);
+    const { data: payload, status } = await api.sendOtp(body);
     batch(() => {
-      dispatch({ type: LOADINGUSER, payload: { status: 0 } })
-      dispatch({ type: STATUSUSER, payload: { info: {
-        message: "Success! Otp sent.",
-        severity: "success",
-        code: "sendOtp"
-      } } });
+      dispatch({ type: LOADINGUSER, payload: { status: 0 } });
+      dispatch({
+        type: STATUSUSER,
+        payload: {
+          info: {
+            message: "Success! Otp sent.",
+            severity: "success",
+            code: "sendOtp",
+          },
+        },
+      });
     });
-    dispatch({ type: AUTH, data });
+    dispatch({ type: AUTH, payload });
+  } catch (error) {
+    logError(error, dispatch);
   }
-  catch (error) {
-    logError(error, dispatch)
-  }
-}
+};
 
 function logError(error, dispatch) {
   if (error.response) {

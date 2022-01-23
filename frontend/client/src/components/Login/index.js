@@ -7,7 +7,7 @@ import { batch, useDispatch, useSelector } from "react-redux";
 import Navbar from "../Header";
 import useStyles from "./styles.js";
 import Footer from "../Footer";
-import { unsetErr, unsetStatus } from "../../actions/errors";
+import { unsetErr, unsetStatus } from "../../redux/actions/errors";
 import ShowFeedback from "../utils/ShowFeedback";
 import Form from "./Form";
 

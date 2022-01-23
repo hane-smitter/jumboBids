@@ -1,60 +1,70 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useLocation } from "react-router";
-import { batch, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import useStyles from "./styles.js";
-import { getProducts } from "../../../../actions/products";
 import LightBox from "./LightBox";
 import DarkBox from "./DarkBox";
 import BiddersBox from "./BiddersBox";
 import ShowFeedback from "../../../utils/ShowFeedback";
-import { unsetErr, unsetStatus } from "../../../../actions/errors";
-import Footer from "../../../Footer";
+import { unsetErr, unsetStatus } from "../../../../redux/actions/errors";
+import {
+  getProductDetails,
+  getProducts,
+} from "../../../../redux/actions/products.js";
+import { storeService } from "../../../../api/storeService.js";
 
 const Detail = () => {
-  const { products, err, status } = useSelector((state) => state.app);
+  const { details: focusProductDetails, loading } = useSelector(
+    (state) => state.selectedProductDetails
+  );
+  const { err, status } = useSelector((state) => state.app);
   const dispatch = useDispatch();
   const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const locationRouter = useLocation();
-  let focusItem = locationRouter.state.product;
-  const [product, setProduct] = useState(focusItem);
+  const [product, setProduct] = useState({});
   const classes = useStyles();
-  function rehydrateProducts() {
-    dispatch(getProducts(undefined, updateProduct));
-    // updateProduct();
-  }
 
-  function updateProduct(prods) {
-    let currProductArr = prods.filter((product) => {
-      return Boolean(
-        product?.product?._id === locationRouter.state.product?.product?._id
-      );
-    });
-    if (currProductArr.length > 0) {
-      setProduct(currProductArr[0]);
-    }
+  function rehydrateProduct(bidId, productId) {
+    dispatch(getProductDetails(bidId, productId));
+    console.group("FOCUS PRODUCT");
+    console.log(focusProductDetails);
+    console.groupEnd();
+  }
+  function updateFocusProduct() {
+    rehydrateProduct(
+      locationRouter?.state?.product._id || storeService.bidInView,
+      locationRouter?.state?.product.product._id || storeService.productInView
+    );
   }
 
   useEffect(() => {
-    rehydrateProducts();
+    let routeStateProduct = locationRouter?.state?.product;
+    if (routeStateProduct) {
+      storeService.saveBidInViewId = routeStateProduct._id;
+      storeService.saveProductInViewId = routeStateProduct.product._id;
+      setProduct(routeStateProduct);
+    }
+    rehydrateProduct(
+      routeStateProduct._id || storeService.bidInView,
+      routeStateProduct.product._id || storeService.productInView
+    );
     return () => {
       dispatch(unsetErr());
       dispatch(unsetStatus());
     };
   }, []);
   useEffect(() => {
+    focusProductDetails && setProduct(focusProductDetails?.product);
+  }, [focusProductDetails]);
+  useEffect(() => {
     setAlertOpen(Boolean(status?.info));
   }, [status]);
   useEffect(() => {
     setErrAlertOpen(Boolean(err.length > 0));
   }, [err]);
-
-  // useEffect(() => {
-  //   console.log("use effect called updateProduct!!");
-  //   updateProduct();
-  // }, [products]);
 
   return (
     <>
@@ -81,10 +91,17 @@ const Detail = () => {
         </Grid>
 
         <Grid item xs={12} md={5} className={classes.flex}>
-          <BiddersBox product={product} />
+          <BiddersBox
+            bidders={focusProductDetails?.bidders}
+            loading={loading}
+          />
         </Grid>
         <Grid item xs={12} md={4} className={classes.flex}>
-          <DarkBox updateProducts={rehydrateProducts} product={product} />
+          <DarkBox
+            updateProduct={updateFocusProduct}
+            product={product}
+            topBidder={focusProductDetails?.bidders?.highestBidder}
+          />
         </Grid>
       </Grid>
     </>

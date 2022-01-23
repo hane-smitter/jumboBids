@@ -5,10 +5,8 @@ import {
     CardActionArea,
     CardMedia,
     Card,
-    CardHeader,
     Grid,
     Box,
-    Divider,
     Button,
   } from "@mui/material";
 
@@ -21,7 +19,7 @@ import MoneyFormat from "../../../../utils/MoneyFormat";
 
 
 const LightBox = ({ product }) => {
-  const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product.slots));
+  const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product?.slots));
     const classes = useStyles();
     const defaultCountDownTime = {
     seconds: '00',
@@ -32,7 +30,7 @@ const LightBox = ({ product }) => {
   const [ countDownTime, setCountDownTime ] = useState(defaultCountDownTime);
 
   function updateTime() {
-    setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
+    setCountDownTime(FutureTimeCalc(product?.startTime, product?.endTime));
   }
 
   useEffect(() => {
@@ -51,8 +49,8 @@ const LightBox = ({ product }) => {
             align="center"
             component={"img"}
             className={classes.media}
-            image={product.product.image ? product.product.image : defaultImg}
-            title={product.product.name}
+            image={product?.product?.image ? product?.product?.image : defaultImg}
+            title={product?.product?.name}
           >
           </CardMedia>
             
@@ -90,10 +88,10 @@ const LightBox = ({ product }) => {
               </span>
             </Typography>
               <Typography variant="body2" align="center" component="p" style={{fontWeight:'bold'}}>
-                  RRP @ {MoneyFormat(product.product.cost)}
+                  RRP @ {MoneyFormat(product?.product?.cost)}
               </Typography>
               <Typography variant="body2" align="center" component="p" style={{fontWeight:'bold'}}>
-                Slots Remaining: {product.totalslots ?? 0}
+                Slots Remaining: {product?.totalslots ?? 0}
               </Typography>
             <Grid container>
               <Button type="submit" variant="contained" color="primary" fullWidth>
@@ -107,4 +105,4 @@ const LightBox = ({ product }) => {
   );
 };
 
-export default LightBox;
+export default React.memo(LightBox);

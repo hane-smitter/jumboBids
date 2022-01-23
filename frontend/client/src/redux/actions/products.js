@@ -1,7 +1,7 @@
 import { buttonUnstyledClasses } from "@mui/material";
 import { batch } from "react-redux";
 
-import * as api from "../api";
+import * as api from "../../api";
 import {
   CREATE,
   READPROD,
@@ -12,7 +12,10 @@ import {
   STATUS,
   FETCHTB,
   FETCHCB,
-  FETCHLB
+  FETCHLB,
+  READ_PROD_DET_REQUEST,
+  READ_PROD_DET_SUCCESS,
+  READ_PROD_DET_FAIL
 } from "../constants";
 
 //Action creators
@@ -118,6 +121,20 @@ export const fetchLastBidder = (body) => async (dispatch) => {
   }
 };
 
+export const getProductDetails = (bidId, productId) => async (dispatch) => {
+  try {
+    dispatch({ type: READ_PROD_DET_REQUEST});
+    //fetch top bidder
+    const { data } = await api.fetchBiddableProductDetails(bidId, productId);
+
+    batch(() => {
+      dispatch({ type: READ_PROD_DET_SUCCESS, payload: data });
+    });
+  } catch (error) {
+    logError_v2(error, dispatch, READ_PROD_DET_FAIL);
+  }
+};
+
 function logError(error, dispatch) {
   if (error.response) {
     const { err } = error.response.data;
@@ -148,6 +165,36 @@ function logError(error, dispatch) {
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: ERROR, payload: { err } });
+    });
+  }
+}
+function logError_v2(error, dispatch, actionType) {
+  if (error.response) {
+    const { err } = error.response.data;
+    batch(() => {
+      dispatch({ type: actionType, payload: err });
+    });
+  } else if (error.request) {
+    const err = [
+      {
+        msg: "Could not get response",
+      },
+    ];
+
+    batch(() => {
+      dispatch({ type: actionType, payload: err });
+    });
+  } else {
+    console.error(error);
+    console.log(error.message);
+    let err = [
+      {
+        msg: "Oops! An unknown error occured!",
+      },
+    ];
+
+    batch(() => {
+      dispatch({ type: actionType, payload: err });
     });
   }
 }

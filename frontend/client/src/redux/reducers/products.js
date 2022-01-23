@@ -2,17 +2,18 @@ import {
   CREATE,
   READPROD,
   READCAT,
-  UPDATE,
-  DELETE,
   ERROR,
   LOADING,
   STATUS,
   FETCHTB,
   FETCHLB,
-  FETCHCB
+  FETCHCB,
+  READ_PROD_DET_SUCCESS,
+  READ_PROD_DET_REQUEST,
+  READ_PROD_DET_FAIL,
 } from "../constants";
 
-export default (
+export const app = (
   app = {
     products: [],
     status: {},
@@ -20,8 +21,8 @@ export default (
     bidder: {
       topBidder: {},
     },
-    lastBidder:{},
-    currentBidders:[],
+    lastBidder: {},
+    currentBidders: [],
     loading: false,
     err: [],
   },
@@ -31,11 +32,12 @@ export default (
     /* case READPROD:
             return action.payload.products; */
     case READPROD:
-      return { ...app, 
-        products: action.payload.data, 
+      return {
+        ...app,
+        products: action.payload.data,
         currentPage: action.payload.currentPage,
         numberOfPages: action.payload.numberOfPages,
-       };
+      };
     case CREATE:
       return {
         ...app,
@@ -56,10 +58,10 @@ export default (
         ...app,
         lastBidder: action.payload.bidder,
       };
-      case FETCHCB:
+    case FETCHCB:
       return {
         ...app,
-        currentBidders: action.payload.bidder ,
+        currentBidders: action.payload.bidder,
       };
     case STATUS:
       return {
@@ -78,5 +80,38 @@ export default (
       };
     default:
       return app;
+  }
+};
+
+export const selectedProductDetails = (
+  state = {
+    details: null,
+    loading: true,
+    err: null,
+  },
+  action
+) => {
+  const { type, payload } = action;
+  switch (type) {
+    case READ_PROD_DET_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case READ_PROD_DET_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        details: payload,
+        err: null,
+      };
+    case READ_PROD_DET_FAIL:
+      return {
+        ...state,
+        loading: false,
+        err: payload,
+      };
+    default:
+      return state;
   }
 };

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { red, grey } from "@mui/material/colors";
 
-import { fetchLastBidder } from "../../../../actions/products";
+import { fetchLastBidder } from "../../../../redux/actions/products";
 import useStyles from "../styles";
 import MoneyFormat from "../../../utils/MoneyFormat/index.js";
 import CountDown from "./CountDown";

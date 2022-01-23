@@ -1,17 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React  from "react";
 import { CardContent, Tooltip, CardMedia } from "@mui/material";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Formik, Field, Form } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { makeBid, fetchTopBidder } from "../../../actions/products";
-import { unsetErr } from "../../../actions/errors";
 import useStyles from "./styles";
 import Styled from "./Styless";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
-import MoneyFormat from "../../utils/MoneyFormat/index.js";
-import BidForm from "./Form";
 import ProductDetail from "./ProductDetail";
 
 const Product = ({ product }) => {

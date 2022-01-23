@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Typography,
   Box,
@@ -20,23 +20,22 @@ import ImageIcon from "@mui/icons-material/Image";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
 
-import { makeBid, fetchTopBidder } from "../../../../../actions/products";
+import { makeBid, fetchTopBidder } from "../../../../../redux/actions/products";
 import useStyles from "./styles.js";
 
-const DarkBox = ({ product, updateProducts }) => {
+const DarkBox = ({ product, updateProduct, topBidder }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const {
     err,
     loading,
     status,
-    bidder: { topBidder, },
   } = useSelector((state) => state.app);
   let newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
   //form initial values
   let initialValues = {
-    bidAmount: product.bidPrice,
+    bidAmount: product?.bidPrice,
     bidder: {
       phone: "",
       acknowledgeNew: newBidder,
@@ -44,8 +43,8 @@ const DarkBox = ({ product, updateProducts }) => {
       lastname: "",
       location: "",
     },
-    bidPrice: product.bidPrice,
-    productId: product.product._id,
+    bidPrice: product?.bidPrice,
+    productId: product?.product?._id,
   }
   if (newBidder) {
     window.scroll({ top: 2, left: 0, behavior: "smooth" });
@@ -75,7 +74,7 @@ const DarkBox = ({ product, updateProducts }) => {
     bidAmount: Yup.number()
       .required("Bidding amount is required")
       .positive("This amount is not allowed")
-      .min(product.bidPrice, `Minimum bidding amount is ${product.bidPrice}`)
+      .min(product?.bidPrice, `Minimum bidding amount is ${product?.bidPrice}`)
       .integer(),
     bidder: Yup.object().shape({
       phone: Yup.number("You phone number should be numerical")
@@ -130,9 +129,6 @@ const DarkBox = ({ product, updateProducts }) => {
     );
   };
 
-  useEffect(() => {
-    dispatch(fetchTopBidder({"productId": product.product._id}));
-  }, []);
   return (
     <Box className={classes.darkBox}>
       <Card className={classes.cardRoot}>
@@ -155,16 +151,16 @@ const DarkBox = ({ product, updateProducts }) => {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={topBidder?.bidder?.user?.fullname ?? "___"}
+                  primary={topBidder?.user?.fullname ?? "___"}
                 />
                 <ListItemText
-                  primary={`KES ${topBidder?.bidder?.bidAmountTotal ?? 0}`}
+                  primary={`KES ${topBidder?.bidAmountTotal ?? 0}`}
                 />
               </ListItem>
             </List>
             <Divider color="grey" />
             <Typography gutterBottom variant="body2" color="inherit" component="p">
-              Place your bid Bid. Minimum Bid amount is {product.bidPrice}
+              Place your bid Bid. Minimum Bid amount is {product?.bidPrice}
               /= . Enter phone number then standby to pay via Mpesa
             </Typography>
 
@@ -176,11 +172,11 @@ const DarkBox = ({ product, updateProducts }) => {
                   sessionStorage.setItem('bidderFormData', JSON.stringify(values));
                 }
 
-                let currentCard = document.querySelector(`#bid4m-${product._id}`);
-                currentCard.dataset.id === product._id &&
+                let currentCard = document.querySelector(`#bid4m-${product?._id}`);
+                currentCard.dataset.id === product?._id &&
                   batch(() => {
                     dispatch(makeBid(values));
-                    updateProducts();
+                    updateProduct();
                     dispatch(fetchTopBidder());
                   });
               }}
@@ -189,10 +185,10 @@ const DarkBox = ({ product, updateProducts }) => {
               {(props) => (
                 <form
                   onSubmit={props.handleSubmit}
-                  id={"bid4m-" + product._id}
+                  id={"bid4m-" + product?._id}
                   autoComplete="off"
                   noValidate
-                  data-id={product._id}
+                  data-id={product?._id}
                 >
                   {newBidder ? (
                     <>
@@ -230,7 +226,7 @@ const DarkBox = ({ product, updateProducts }) => {
                     name="bidAmount"
                     label="Bid amount"
                     placeholder="for example 237"
-                    inputProps={{ min: product.bidPrice }}
+                    inputProps={{ min: product?.bidPrice }}
                     type="number"
                     component={Input}
                   />
@@ -245,7 +241,7 @@ const DarkBox = ({ product, updateProducts }) => {
 
                   <Button type="submit" variant="contained" color="primary" fullWidth>
                     {loading ? (
-                      <CircularProgress style={{ color: "white" }} />
+                      <CircularProgress disableShrink style={{ color: "white" }} />
                     ) : (
                       "Place your bid"
                     )}
@@ -259,4 +255,4 @@ const DarkBox = ({ product, updateProducts }) => {
   );
 };
 
-export default DarkBox;
+export default React.memo(DarkBox);

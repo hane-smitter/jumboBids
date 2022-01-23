@@ -5,7 +5,7 @@ import { Pagination } from '@mui/material';
 import { PaginationItem } from '@mui/lab';
 import { Link } from 'react-router-dom';
 
-import { getProducts } from "../actions/products";
+import { getProducts } from "../redux/actions/products";
 import useStyles from './styles';
 
 const Paginate = ({ page }) => {

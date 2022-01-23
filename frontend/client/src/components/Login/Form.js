@@ -23,10 +23,10 @@ import { Alert, AlertTitle } from '@mui/material';
 import ImageIcon from "@mui/icons-material/Image";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
-import { loginUser } from "../../actions/users.js";
-import { AUTH } from '../../constants';
+import { loginUser } from "../../redux/actions/users.js";
+import { AUTH } from '../../redux/constants';
 
-import { unsetErr, unsetStatus } from "../../actions/errors";
+import { unsetErr, unsetStatus } from "../../redux/actions/errors";
 import ShowFeedback from "../utils/ShowFeedback";
 
 import useStyles from "./styles.js";
@@ -34,7 +34,7 @@ import { useLocation } from "react-router";
 import { array } from "yup/lib/locale";
 import { useNavigate } from "react-router-dom";
 import decode from 'jwt-decode';
-import * as actionType from '../../constants';
+import * as actionType from '../../redux/constants';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import LockIcon from '@mui/icons-material/Lock';
 
