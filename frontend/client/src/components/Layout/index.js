@@ -16,6 +16,7 @@ const ContentContainer = styled("div")`
   width: 100%;
   padding-inline: ${({ theme }) => theme.spacing(2)};
   background-color: ${({ theme }) => theme.palette.primary.main};
+  position: relative;
 `;
 
 const Layout = () => {
