@@ -54,6 +54,6 @@ app.use(errorHandler);
 DB.on("connected", function () {
   console.log(chalk.rgb(208, 60, 240)("DB is connected"));
   app.listen(PORT, () =>
-    console.log(chalk.rgb(208, 60, 240)(`Server listening on port: ${PORT}`))
-  );
+      console.log(chalk.rgb(208, 60, 240)(`Server listening on port: ${PORT}`))
+    );
 });

@@ -1,6 +1,7 @@
 import fs from "fs";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
+import cachegoose from "cachegoose";
 
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
@@ -156,6 +157,7 @@ export const createProductBidDetails = async (req, res, next) => {
     /* console.log('bid product');
         console.log(bidDetails); */
     await bidDetails.save();
+    cachegoose.clearCache("productbiddetails");
     res.status(201).json({
       info: {
         message: "Bid details for the product is created successfully",

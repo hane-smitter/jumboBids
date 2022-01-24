@@ -18,65 +18,72 @@ export const app = (
     products: [],
     status: {},
     categories: [],
-    bidder: {
+    /* bidder: {
       topBidder: {},
     },
     lastBidder: {},
-    currentBidders: [],
+    currentBidders: [], */
     loading: false,
     err: [],
   },
   action
 ) => {
-  switch (action.type) {
+  const { type, payload } = action;
+  switch (type) {
     /* case READPROD:
-            return action.payload.products; */
+            return payload.products; */
     case READPROD:
+      const { data, loadType, ...pageData } = payload;
+      console.group("LOAD TYPE FROM REDUCERS");
+      console.log("load type: ", loadType);
+      console.groupEnd();
       return {
         ...app,
-        products: action.payload.data,
-        currentPage: action.payload.currentPage,
-        numberOfPages: action.payload.numberOfPages,
+        products:
+          String(loadType).toLowerCase() === "secondary"
+            ? [...app.products, ...data]
+            : data,
+        ...pageData,
       };
     case CREATE:
       return {
         ...app,
-        products: [...app.products, action.payload.product],
+        products: [...app.products, payload.product],
       };
     case READCAT:
       return {
         ...app,
-        categories: action.payload.categories,
+        categories: payload.categories,
       };
     case FETCHTB:
       return {
         ...app,
-        bidder: { ...app.bidder, topBidder: action.payload.bidder },
+        bidder: { ...app.bidder, topBidder: payload.bidder },
       };
     case FETCHLB:
       return {
         ...app,
-        lastBidder: action.payload.bidder,
+        lastBidder: payload.bidder,
       };
     case FETCHCB:
       return {
         ...app,
-        currentBidders: action.payload.bidder,
+        currentBidders: payload.bidder,
       };
     case STATUS:
       return {
         ...app,
-        status: action.payload.status,
+        status: payload.status,
       };
     case ERROR:
       return {
         ...app,
-        err: [...action.payload.err],
+        err: [...payload.err],
       };
     case LOADING:
       return {
         ...app,
-        loading: Boolean(action.payload.status),
+        loading: Boolean(payload.status),
       };
     default:
       return app;

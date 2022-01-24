@@ -1,61 +1,82 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import {
-  Container,
-  Grow,
-  Box,
-  Grid,
-  Typography,
-  Paper,
-} from "@mui/material";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useSelector, useDispatch } from "react-redux";
+import { Stack, CircularProgress } from "@mui/material";
 
-import { getProducts } from "../../redux/actions/products";
 import Users from "../Users/Users.js";
 import Navbar from "../Header";
 import Banner from "../Banners/Home";
 import useStyles from "./styles";
 import Products from "../Products/Products";
-import Pagination from "../Pagination";
+import { getProducts } from "../../redux/actions/products";
 import { useLocation } from "react-router-dom";
+import { unsetErr } from "../../redux/actions/errors.js";
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 const Home = () => {
-  const query = useQuery();
-  const page = query.get("page") || 1;
+  const dispatch = useDispatch();
+  const { loading, products, categories, err, nextPageToken, pageInfo } =
+    useSelector((state) => state.app);
+  const [loadMore, setLoadMore] = React.useState(true);
+  const fetchMoreProducts = () => {
+    dispatch(getProducts({ nextPageToken }, "secondary"));
+  };
+  const refreshProducts = () => {
+    dispatch(getProducts());
+  };
 
-  // useEffect(() => {
-  //     dispatch(getProducts());
-  // }, [dispatch]);
-  // const theme = useTheme();
-  
+  React.useEffect(() => {
+    dispatch(getProducts());
+    return () => {
+      dispatch(unsetErr());
+      window.scroll(0, 0);
+    };
+  }, []);
+  React.useEffect(() => {
+    if (products?.length && pageInfo?.totalResults) {
+      if (products?.length >= pageInfo.totalResults) {
+        alert("set loadmore to false");
+        setLoadMore((_) => false);
+      }
+    }
+  }, [products]);
+
   return (
     <>
       <Banner />
-      {/* <Grid container justifyContent="center" className={classes.bg}>
-                    <Banner />
-                </Grid> */}
-      <Products />
-      <Box
-        style={{
-          borderLeft: "solid 2px #2b5681",
-          borderRight: "solid 2px #2b5681",
-          marginTop: "-20px",
-          marginBottom: "20px",
-        }}
+      <InfiniteScroll
+        dataLength={products?.length}
+        next={fetchMoreProducts}
+        hasMore={loadMore}
+        loader={
+          <Stack>
+            <CircularProgress
+              disableShrink
+              sx={{ color: "yellow", m: "auto" }}
+            />
+          </Stack>
+        }
+        endMessage={
+          <p style={{ textAlign: "center", color: "rgba(255,255,255,0.6)" }}>
+            <strong>More coming soon... 🔥</strong>
+          </p>
+        }
+        // below props only if you need pull down functionality
+        refreshFunction={refreshProducts}
+        pullDownToRefresh
+        pullDownToRefreshThreshold={50}
+        releaseToRefreshContent={
+          <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+        }
       >
-        <Grid
-          container
-          justifyContent="center"
-          alignItems="stretch"
-          spacing="3"
-        >
-          <Grid item xs={12} sm={6} md={3}>
-            <Pagination page={page} />
-          </Grid>
-        </Grid>
-      </Box>
+        <Products
+          loading={loading}
+          product={products}
+          categories={categories}
+          err={err}
+          nextPageToken={nextPageToken}
+          pageInfo={pageInfo}
+        />
+      </InfiniteScroll>
     </>
   );
 };

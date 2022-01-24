@@ -1,7 +1,15 @@
 import fs from "fs";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
+import cachegoose from 'cachegoose';
 
+cachegoose(mongoose, {
+  engine: 'redis',    /* If you don't specify the redis engine,      */
+  port: 6379,         /* the query results will be cached in memory. */
+  host: 'localhost'
+});
+
+import {clearKey} from "../../db/services/cache.js";
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
 import Category from "../../models/Category.js";
@@ -25,6 +33,7 @@ export const getProducts = async (req, res, next) => {
   }
 };
 
+// Products available for bidding
 export const getBiddableProducts = async (req, res, next) => {
   const handlePaginate = req.handlePaginate;
   const { nextPageToken, prevPageToken, maxResults } = req.query;
@@ -33,7 +42,7 @@ export const getBiddableProducts = async (req, res, next) => {
     const itemCount = await ProductBidDetail.countDocuments({
       endTime: { $gt: new Date().toISOString() },
       status: "Active",
-    });
+    }).cache(0, "productbiddetails");
 
     const paginationConfig = {
       totalResults: itemCount,
@@ -59,6 +68,11 @@ export const getBiddableProducts = async (req, res, next) => {
         path: "product",
         match,
       })
+      .populate({
+        path: "prodbids",
+        options: { limit: 1, sort: "-updatedAt" },
+        populate: { path: "user", select: "surname othername location -_id" },
+      })
       .sort([["endTime", 1]])
       .limit(limit)
       .skip(skip);
@@ -71,9 +85,10 @@ export const getBiddableProducts = async (req, res, next) => {
   }
 };
 
+// Details for a single biddable product
 export const getBiddableProductDetails = async (req, res, next) => {
   try {
-    const { bidDetailsId, productId } = req.params;
+    const { bidDetailsId, productId } = req.query;
 
     const highestBidder = Bid.findOne(
       {
@@ -88,11 +103,11 @@ export const getBiddableProductDetails = async (req, res, next) => {
       {
         product: mongoose.Types.ObjectId(productId),
       },
-      "-updatedAt -_id -bidAmount"
+      "-createdAt -_id -bidAmount"
     )
       .populate("user", "-createdAt -updatedAt -_id")
       .limit(5)
-      .sort("-bidsCount");
+      .sort("-updatedAt");
     const biddableProductDetails = ProductBidDetail.find(
       {
         _id: bidDetailsId,

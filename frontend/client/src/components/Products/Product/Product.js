@@ -1,18 +1,11 @@
 import React  from "react";
 import { CardContent, Tooltip, CardMedia } from "@mui/material";
 import { motion } from "framer-motion";
-import useStyles from "./styles";
-import Styled from "./Styless";
+import Styled from "./Styled";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
 import ProductDetail from "./ProductDetail";
 
 const Product = ({ product }) => {
-  const classes = useStyles();
-
-  const location = {
-    pathname: "/detail",
-    state: { product },
-  };
 
   const cardVariants = {
     blink: {
@@ -29,19 +22,15 @@ const Product = ({ product }) => {
 
   return (
     <Styled.CardRoot
-      // className={(classes.root, classes.borderBlack)}
       component={motion.div}
       variants={cardVariants}
     >
       <Styled.SectionImage>
-        {/* <Link to={location}> */}
         <CardMedia
-          // className={classes.media}
           component="img"
           src={product.product.image || defaultImg}
           alt={product.product.name}
         />
-        {/* </Link> */}
       </Styled.SectionImage>
       <Styled.SectionContent>
         <CardContent sx={{ padding: 0 }}>

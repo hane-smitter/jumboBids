@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Typography, Button, Box } from "@mui/material";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { red, grey } from "@mui/material/colors";
 
-import { fetchLastBidder } from "../../../../redux/actions/products";
-import useStyles from "../styles";
 import MoneyFormat from "../../../utils/MoneyFormat/index.js";
 import CountDown from "./CountDown";
 
@@ -24,26 +21,6 @@ const Text = styled(Typography)(({ theme, role }) => ({
 
 const ProductDetail = ({ product }) => {
   const [cardBlinking] = useState(!Boolean(product.slots));
-  const [prevBidder, setPrevBidder] = useState({ fullname: "", location: "" });
-  const classes = useStyles();
-
-  const { err, loading, status, lastBidder } = useSelector(
-    (state) => state.app
-  );
-
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchLastBidder({ productId: product.product._id }));
-  }, []);
-  useEffect(() => {
-    if (lastBidder?.bidder?.user) {
-      setPrevBidder({
-        fullname: lastBidder.bidder.user.fullname,
-        location: lastBidder.bidder.user.location,
-      });
-    }
-  }, [lastBidder]);
 
   const cardVariants = {
     blink: {
@@ -80,10 +57,16 @@ const ProductDetail = ({ product }) => {
           # {product.totalslots ?? 0}
         </Text>
       </Text>
-      <Text variant="body2">Last Bidder: {prevBidder.fullname}</Text>
-      <Text variant="body2" gutterBottom>
-        Location: {prevBidder.location}
-      </Text>
+      {product?.prodbids[0]?.user && (
+        <>
+          <Text variant="body2">
+            Last Bidder: {product?.prodbids[0]?.user?.fullname}
+          </Text>
+          <Text variant="body2" gutterBottom>
+            Location: {product?.prodbids[0]?.user?.location}
+          </Text>
+        </>
+      )}
       <Text role={cardBlinking ? "alert" : ""} variant="body2" component="p">
         Ends in:
       </Text>

@@ -1,83 +1,77 @@
-import React, { useEffect } from "react";
-import {
-  Typography,
-  Box,
-  Stack,
-  CircularProgress,
-  Divider,
-  ListItem,
-  Avatar,
-  List,
-  ListItemAvatar,
-  CardContent,
-  Card,
-  ListItemText,
-} from "@mui/material";
-import ImageIcon from "@mui/icons-material/Image";
-import useStyles from "./styles.js";
+import React, { useState } from "react";
+import { Tooltip, Button } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import dayjs from "dayjs";
 
-const DarkBox = ({ bidders, loading }) => {
-  const classes = useStyles();
+import Styled from "./Styled";
 
+const BiddersBox = ({ bidders, loading }) => {
+  const [showCurrentBids, setShowCurrentBids] = useState(true);
+
+  const toggleCloseView = () => {
+    setShowCurrentBids((prev) => !prev);
+  };
   return (
-    <Box className={classes.darkBox}>
-      <Card className={classes.cardRoot}>
-        <Typography
-          className={classes.white}
-          style={{ backgroundColor: "#000", textAlign: "center" }}
-          variant="h5"
+    <>
+      {!showCurrentBids && (
+        <Button
+          variant="contained"
+          sx={{ bgColor: "common.black" }}
+          onClick={toggleCloseView}
         >
-          Current Bids
-        </Typography>
-        {!loading ? (
-          <CardContent>
-            <Divider color="grey" />
-            <List>
-              <ListItem>
-                <ListItemText>Bid</ListItemText>
-                <ListItemText>User</ListItemText>
-                <ListItemText>Time</ListItemText>
-              </ListItem>
-              {bidders?.topActiveBidders?.length > 0 && (
-                <span>
-                  {bidders.topActiveBidders.map((activeBidder) => (
-                    <ListItem
-                      style={{ padding: 0, margin: 0, fontSize: "4px" }}
-                    >
-                      <ListItemText
-                        style={{ padding: 0, margin: 0, fontSize: "4px" }}
-                      >
-                        {activeBidder?.bidAmountTotal ?? 0}
-                      </ListItemText>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText>
-                        {activeBidder?.user?.surname ?? "__"}
-                      </ListItemText>
-                      <ListItemText>
-                        {new Date(activeBidder?.createdAt ?? "").toLocaleString(
-                          "en-US",
-                          { hour: "numeric", minute: "numeric" }
-                        )}
-                      </ListItemText>
-                    </ListItem>
-                  ))}
-                </span>
-              )}
-            </List>
-            <Divider color="grey" />
-          </CardContent>
-        ) : (
-          <Stack sx={{ width: "100%", height: "100%" }}>
-            <CircularProgress sx={{ m: "auto", color: "common.white" }} />
-          </Stack>
-        )}
-      </Card>
-    </Box>
+          see item's recent bids
+        </Button>
+      )}
+      {!loading && showCurrentBids && (
+        <Styled.TbContainer>
+          <Styled.TbCloseContainer>
+            <Tooltip title="close">
+              <Styled.TbClose>
+                <CloseIcon onClick={toggleCloseView} />
+              </Styled.TbClose>
+            </Tooltip>
+          </Styled.TbCloseContainer>
+          <Styled.TbTitle component="div">Recent Bids</Styled.TbTitle>
+          <Styled.Tb
+            sx={{ maxWidth: 400, maxHeight: 300 }}
+            aria-label="current bidders table"
+          >
+            <Styled.TbHead>
+              <Styled.TbRow>
+                <Styled.TbCell align="right">Amount</Styled.TbCell>
+                <Styled.TbCell>By</Styled.TbCell>
+                <Styled.TbCell align="right">Location</Styled.TbCell>
+                <Styled.TbCell align="right">On</Styled.TbCell>
+              </Styled.TbRow>
+            </Styled.TbHead>
+            <Styled.TbBody>
+              {bidders.topActiveBidders.map((activeBidder, index) => (
+                <Styled.TbRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <Styled.TbCell align="right">
+                    {activeBidder?.bidAmountTotal}
+                  </Styled.TbCell>
+                  <Styled.TbCell component="th" scope="row">
+                    {activeBidder?.user?.fullname}
+                  </Styled.TbCell>
+                  <Styled.TbCell align="right">
+                    {activeBidder?.user?.location}
+                  </Styled.TbCell>
+                  <Styled.TbCell align="right">
+                    {dayjs(
+                      new Date(activeBidder?.updatedAt ?? "").toISOString()
+                    ).format("DD/MM/YYYY")}
+                  </Styled.TbCell>
+                </Styled.TbRow>
+              ))}
+            </Styled.TbBody>
+          </Styled.Tb>
+        </Styled.TbContainer>
+      )}
+    </>
   );
 };
 
-export default DarkBox;
+export default React.memo(BiddersBox);

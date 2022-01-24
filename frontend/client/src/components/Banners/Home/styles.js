@@ -5,7 +5,7 @@ const BannerCont = styled(Box)`
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 400px;
+  height: 300px;
 `;
 const BannerImg = styled(Box)`
   display: block;
