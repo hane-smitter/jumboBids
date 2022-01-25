@@ -4,7 +4,6 @@ import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Stack } from "@mui/material";
 
-import useStyles from "./styles.js";
 import LightBox from "./LightBox";
 import DarkBox from "./DarkBox";
 import BiddersBox from "./BiddersBox";
@@ -12,7 +11,6 @@ import ShowFeedback from "../../../utils/ShowFeedback";
 import { unsetErr, unsetStatus } from "../../../../redux/actions/errors";
 import {
   getProductDetails,
-  getProducts,
 } from "../../../../redux/actions/products.js";
 import { storeService } from "../../../../api/storeService.js";
 import Styled from "./Styled.js";
@@ -27,19 +25,9 @@ const Detail = () => {
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const locationRouter = useLocation();
   const [product, setProduct] = useState({});
-  const classes = useStyles();
 
   function rehydrateProduct(bidId, productId) {
     dispatch(getProductDetails(bidId, productId));
-    console.group("FOCUS PRODUCT");
-    console.log(focusProductDetails);
-    console.groupEnd();
-  }
-  function updateFocusProduct() {
-    rehydrateProduct(
-      locationRouter?.state?.product._id || storeService.bidInView,
-      locationRouter?.state?.product.product._id || storeService.productInView
-    );
   }
 
   useEffect(() => {
@@ -98,7 +86,7 @@ const Detail = () => {
           <LightBox product={product} />
         </Grid>
 
-        {focusProductDetails?.bidders?.topActiveBidders.lenght > 0 && (
+        {focusProductDetails?.bidders?.topActiveBidders.length > 0 && (
           <Styled.BiddersBoxContainer>
             <BiddersBox
               bidders={focusProductDetails?.bidders}
@@ -108,7 +96,6 @@ const Detail = () => {
         )}
         <Grid item xs={12} md={4}>
           <DarkBox
-            updateProduct={updateFocusProduct}
             product={product}
             topBidder={focusProductDetails?.bidders?.highestBidder}
           />

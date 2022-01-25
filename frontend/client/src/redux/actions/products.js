@@ -1,11 +1,9 @@
-import { buttonUnstyledClasses } from "@mui/material";
 import { batch } from "react-redux";
 
 import * as api from "../../api";
 import {
   CREATE,
   READPROD,
-  UPDATE,
   READCAT,
   ERROR,
   LOADING,
@@ -15,7 +13,7 @@ import {
   FETCHLB,
   READ_PROD_DET_REQUEST,
   READ_PROD_DET_SUCCESS,
-  READ_PROD_DET_FAIL
+  READ_PROD_DET_FAIL,
 } from "../constants";
 
 //Action creators
@@ -32,7 +30,14 @@ export const getProducts = (query, cb) => async (dispatch) => {
       api.fetchBiddableProducts(query),
       api.fetchProductCategories(),
     ]);
-    const { data: {data, currentPage, numberOfPages} } = productsData;
+    const {
+      data: {
+        data,
+        pageInfo: { currentPage, numberOfPages, totalResults },
+        nextPageToken,
+        prevPageToken,
+      },
+    } = productsData;
     const { data: categories } = categoriesData;
 
     batch(() => {
@@ -53,26 +58,37 @@ export const createProduct = (body) => async (dispatch) => {
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: STATUS, payload: { info: {
-        message: "Success! Product created.",
-        severity: "success",
-        code: "createproduct"
-      } } });
+      dispatch({
+        type: STATUS,
+        payload: {
+          info: {
+            message: "Success! Product created.",
+            severity: "success",
+            code: "createproduct",
+          },
+        },
+      });
       dispatch({ type: CREATE, payload: { product: data } });
     });
   } catch (error) {
     logError(error, dispatch);
   }
 };
-export const makeBid = (body) => async (dispatch) => {
+export const makeBid = (body, bidId, productId) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //make a product bid
-    const { data:status } = await api.makeBid(body);
+    const { data: status } = await api.makeBid(body);
+
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: STATUS, payload: { status } });
-  });
+    });
+    if (bidId && productId) {
+      bidId = bidId.replace(/"/g, "");
+      productId = productId.replace(/"/g, "");
+      getProductDetails(bidId, productId)(dispatch);
+    }
   } catch (error) {
     logError(error, dispatch);
   }
@@ -96,7 +112,7 @@ export const fetchCurrentBidder = (body) => async (dispatch) => {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch top bidder
     const { data } = await api.fetchCurrentBidder(body);
-    
+
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: FETCHCB, payload: { bidder: data } });
@@ -123,7 +139,7 @@ export const fetchLastBidder = (body) => async (dispatch) => {
 
 export const getProductDetails = (bidId, productId) => async (dispatch) => {
   try {
-    dispatch({ type: READ_PROD_DET_REQUEST});
+    dispatch({ type: READ_PROD_DET_REQUEST });
     //fetch top bidder
     const { data } = await api.fetchBiddableProductDetails(bidId, productId);
 

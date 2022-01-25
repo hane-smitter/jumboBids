@@ -51,19 +51,13 @@ const CountDown = ({ product }) => {
   return (
     <Styled.CountDownBox
       alert={Boolean(product?.slots) ? undefined : "1"}
-      // gutterBottom
-      // variant="body2"
-      // component="p"
-      // align="center"
-      // className={cardBlinking ? classes.danger : undefined}
-      // style={{ fontWeight: "bold" }}
     >
       <Styled.Time variant="body1" className="paint" component="p">
         Ends in:{" "}
       </Styled.Time>
 
       <div>
-        {countDownTime.days != "00" && (
+        {countDownTime.days !== "00" && (
           <>
             <Styled.Time
               className="paint"

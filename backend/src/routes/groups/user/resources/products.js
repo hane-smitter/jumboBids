@@ -9,9 +9,9 @@ import paginator from "../../../../_helpers/paginate/paginate-handler.js";
 
 const router = express.Router();
 
-router.get("/", getProducts);
+router.get("/bids/iteminfo", getBiddableProductDetails);
 router.get("/bids", paginator, getBiddableProducts);
-router.get("/bids/:bidDetailsId/:productId", getBiddableProductDetails);
+router.get("/", getProducts);
 
 
 

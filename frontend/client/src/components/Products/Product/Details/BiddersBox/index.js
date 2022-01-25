@@ -61,7 +61,7 @@ const BiddersBox = ({ bidders, loading }) => {
                   </Styled.TbCell>
                   <Styled.TbCell align="right">
                     {dayjs(
-                      new Date(activeBidder?.createdAt ?? "").toISOString()
+                      new Date(activeBidder?.updatedAt ?? "").toISOString()
                     ).format("DD/MM/YYYY")}
                   </Styled.TbCell>
                 </Styled.TbRow>

@@ -20,10 +20,11 @@ import ImageIcon from "@mui/icons-material/Image";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
 
-import { makeBid, fetchTopBidder } from "../../../../../redux/actions/products";
+import { makeBid } from "../../../../../redux/actions/products";
+import { storeService } from "../../../../../api/storeService.js";
 import useStyles from "./styles.js";
 
-const DarkBox = ({ product, updateProduct, topBidder }) => {
+const DarkBox = ({ product, topBidder }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { err, loading, status } = useSelector((state) => state.app);
@@ -183,9 +184,13 @@ const DarkBox = ({ product, updateProduct, topBidder }) => {
               );
               currentCard.dataset.id === product?._id &&
                 batch(() => {
-                  dispatch(makeBid(values));
-                  updateProduct();
-                  dispatch(fetchTopBidder());
+                  dispatch(
+                    makeBid(
+                      values,
+                      storeService.bidInView,
+                      storeService.productInView
+                    )
+                  );
                 });
             }}
             validationSchema={makeBidSchema}

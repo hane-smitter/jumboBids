@@ -14,6 +14,7 @@ const TbContainer = styled(TableContainer)(({ theme }) => ({
   backgroundColor: theme.palette.common.black,
   color: theme.palette.common.white,
   maxWidth: 400,
+  maxHeight: 400,
   padding: 10,
   height: "max-content",
   borderBottomLeftRadius: 5,
