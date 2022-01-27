@@ -17,12 +17,7 @@ import {
 } from "../constants";
 
 //Action creators
-export const getProducts = (query, cb) => async (dispatch) => {
-  if (query) {
-    query = "?" + query;
-  } else {
-    query = "";
-  }
+export const getProducts = (query = {}, loadType) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch data
@@ -31,21 +26,18 @@ export const getProducts = (query, cb) => async (dispatch) => {
       api.fetchProductCategories(),
     ]);
     const {
-      data: {
-        data,
-        pageInfo: { currentPage, numberOfPages, totalResults },
-        nextPageToken,
-        prevPageToken,
-      },
+      data: { data, pageInfo, nextPageToken, prevPageToken },
     } = productsData;
     const { data: categories } = categoriesData;
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: READPROD, payload: { data } });
+      dispatch({
+        type: READPROD,
+        payload: { data, pageInfo, nextPageToken, prevPageToken, loadType },
+      });
       dispatch({ type: READCAT, payload: { categories } });
     });
-    cb && cb(data);
   } catch (error) {
     logError(error, dispatch);
   }

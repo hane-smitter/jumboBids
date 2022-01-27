@@ -1,7 +1,15 @@
 import fs from "fs";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
+import cachegoose from 'cachegoose';
 
+cachegoose(mongoose, {
+  engine: 'redis',    /* If you don't specify the redis engine,      */
+  port: 6379,         /* the query results will be cached in memory. */
+  host: 'localhost'
+});
+
+import {clearKey} from "../../db/services/cache.js";
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
 import Category from "../../models/Category.js";
@@ -34,7 +42,7 @@ export const getBiddableProducts = async (req, res, next) => {
     const itemCount = await ProductBidDetail.countDocuments({
       endTime: { $gt: new Date().toISOString() },
       status: "Active",
-    });
+    }).cache(0, "productbiddetails");
 
     const paginationConfig = {
       totalResults: itemCount,

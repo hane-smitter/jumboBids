@@ -1,7 +1,9 @@
 import request from "../request";
 
-export const fetchBiddableProducts = (query) =>
-  request.get(`/products/bids${query}`);
+export const fetchBiddableProducts = (params = {}) =>
+  request.get("/products/bids", {
+    params,
+  });
 export const fetchBiddableProductDetails = (bidId, productId) =>
   request.get("/products/bids/iteminfo", {
     params: {
