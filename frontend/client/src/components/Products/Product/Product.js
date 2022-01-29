@@ -33,7 +33,7 @@ const Product = ({ product }) => {
         />
       </Styled.SectionImage>
       <Styled.SectionContent>
-        <CardContent sx={{ padding: 0 }}>
+        <CardContent sx={{ padding: 0, display: "grid", justifyItems: "center" }}>
           <Tooltip title={product.product.name} placement="top-start">
             <Styled.CardHeading
               disableTypography

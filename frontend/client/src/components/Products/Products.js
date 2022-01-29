@@ -1,5 +1,5 @@
 import React from "react";
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   Typography,
   Grid,
@@ -9,24 +9,38 @@ import {
 } from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CategoryIcon from "@mui/icons-material/Category";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { decode } from "html-entities";
 
 import Product from "./Product/Product";
 import Styled from "./Styled";
-import { getProducts } from "../../redux/actions/products";
-import { unsetErr } from "../../redux/actions/errors";
 
 const Products = (props) => {
-  const { products, categories, pageInfo, nextPageToken } = props;
+  const { products, categories, pageInfo, nextPageToken } = props.bidProducts;
+  const { updateProducts } = props;
 
   const dispatch = useDispatch();
   const [categoryOpen, setCategoryOpen] = React.useState(false);
+  const [loadMore, setLoadMore] = React.useState(true);
+
+  const fetchMoreProducts = () => {
+    updateProducts({ nextPageToken }, "secondary");
+  };
+  const refreshProducts = () => {
+    updateProducts();
+  };
 
   const handleCategoryClick = () => {
     setCategoryOpen(!categoryOpen);
   };
-  
 
+  React.useEffect(() => {
+    if (products?.length && pageInfo?.totalResults) {
+      if (products?.length >= pageInfo.totalResults) {
+        setLoadMore((_) => false);
+      }
+    }
+  }, [products]);
 
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
   return (
@@ -55,7 +69,7 @@ const Products = (props) => {
               }}
               secondary={categories
                 ?.slice(0, Math.ceil(categories.length * 0.3))
-                .map((category) => `${decode(category.name)}, `)}
+                ?.map((category) => `${decode(category.name)}, `)}
               secondaryTypographyProps={{
                 noWrap: true,
                 fontSize: 12,
@@ -78,18 +92,18 @@ const Products = (props) => {
               button
               onClick={() => {
                 setCategoryOpen(false);
-                dispatch(getProducts());
+                updateProducts();
               }}
             >
               <Styled.CBListItemText primary={"All"} />
             </Styled.CBListItem>
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <Styled.CBListItem
                 button
                 key={category._id}
                 onClick={() => {
                   setCategoryOpen(false);
-                  dispatch(getProducts({ category: category.category_slug }));
+                  updateProducts({ category: category.category_slug });
                 }}
               >
                 <Styled.CBListItemText
@@ -101,7 +115,31 @@ const Products = (props) => {
         </Styled.CBCollapse>
       </Styled.CB>
 
-      
+      <InfiniteScroll
+        dataLength={products?.length || 0}
+        next={fetchMoreProducts}
+        hasMore={loadMore}
+        loader={
+          <Stack>
+            <CircularProgress
+              disableShrink
+              sx={{ color: "yellow", m: "auto" }}
+            />
+          </Stack>
+        }
+        endMessage={
+          <p style={{ textAlign: "center", color: "rgba(255,255,255,0.6)" }}>
+            <strong>More coming soon... 🔥</strong>
+          </p>
+        }
+        // below props only if you need pull down functionality
+        refreshFunction={refreshProducts}
+        pullDownToRefresh
+        pullDownToRefreshThreshold={50}
+        releaseToRefreshContent={
+          <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+        }
+      >
         {!products?.length ? (
           <Typography
             variant="h5"
@@ -120,9 +158,9 @@ const Products = (props) => {
             spacing={3}
             style={{ marginBlock: 20, marginBlockEnd: 40 }}
           >
-            {products.map((product) => {
+            {products?.map((product) => {
               let content = null;
-              if (Boolean(product.product)) {
+              if (Boolean(product?.product)) {
                 content = (
                   <Grid
                     style={{ maxWidth: 250 }}
@@ -141,6 +179,7 @@ const Products = (props) => {
             })}
           </Grid>
         )}
+      </InfiniteScroll>
     </>
   );
 };

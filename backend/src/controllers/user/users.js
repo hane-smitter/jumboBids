@@ -2,8 +2,6 @@ import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 import User from "../../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import unirest from "unirest";
-import request from "request";
 import https from "https";
 
 const secret = 'test';
@@ -90,7 +88,7 @@ export const generateOtp = async (req, res, next) => {
     }
 }
 function getToken(phone,otp) {
-    return new Promise((resolve, reject) => {
+    /* return new Promise((resolve, reject) => {
       unirest.post('https://vas.teleskytech.com/api/sendsms?from=Telesky&apiKey=9HkbTre7xDoF6JjS&username=test&message=Your verification code is: '+otp+'&phone='+phone)
         .headers({
           'Content-Type': 'application/json'
@@ -106,7 +104,7 @@ function getToken(phone,otp) {
           }
           return resolve(response.body);
         });
-    })
+    }) */
   }
   
 //verify and send otp
