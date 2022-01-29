@@ -33,10 +33,11 @@ const Product = ({ product }) => {
         />
       </Styled.SectionImage>
       <Styled.SectionContent>
-        <CardContent sx={{ padding: 0 }}>
+        <Styled.CardContentData>
           <Tooltip title={product.product.name} placement="top-start">
             <Styled.CardHeading
               disableTypography
+              sx={{ width: "100%" }}
               subheader={
                 <Styled.CardHeadingText variant="body2">
                   {product.product.name.length > 60 ?
@@ -50,7 +51,7 @@ const Product = ({ product }) => {
           <ProductDetail product={product} />
           {/* product details form */}
           {/* <BidForm product={product} /> */}
-        </CardContent>
+        </Styled.CardContentData>
       </Styled.SectionContent>
     </Styled.CardRoot>
   );

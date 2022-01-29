@@ -5,7 +5,7 @@ import { Menu as MenuIcon } from "@mui/icons-material";
 
 import Search from "./Search";
 import Logo from "../../images/logo.png";
-import Styles from "./Styles";
+import Styled from "./Styled";
 import { navigations } from "./NavItems";
 import MobileDrawer from "./MobileDrawer";
 
@@ -14,21 +14,21 @@ const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
     <header>
-      <Styles.StackCont direction="row" spacing={2}>
-        <Styles.LogoLink to="/" component={RouterLink}>
+      <Styled.StackCont direction="row" spacing={2}>
+        <Styled.LogoLink to="/" component={RouterLink}>
           <Box component="img" src={Logo} style={{ width: "100%" }} />
-        </Styles.LogoLink>
+        </Styled.LogoLink>
 
         {lgScreen && <Search lgScreen={lgScreen} />}
 
         {lgScreen ? (
           <Box sx={{ marginInline: "auto" }}>
-            <Styles.Btn color="secondary" variant="contained">
+            <Styled.Btn color="secondary" variant="contained">
               register
-            </Styles.Btn>
-            <Styles.Btn signin variant="contained" sx={{ ml: 1 }}>
+            </Styled.Btn>
+            <Styled.Btn signin="1" variant="contained" sx={{ ml: 1 }}>
               sign in
-            </Styles.Btn>
+            </Styled.Btn>
           </Box>
         ) : (
           <>
@@ -39,8 +39,8 @@ const Header = () => {
             />
           </>
         )}
-      </Styles.StackCont>
-      <Styles.StackCont
+      </Styled.StackCont>
+      <Styled.StackCont
         sx={{
           backgroundImage: "unset",
           py: lgScreen ? 0 : 2,
@@ -54,12 +54,12 @@ const Header = () => {
               <ul>
                 {navigations.map((navigation, index) => (
                   <li key={index}>
-                    <Styles.RouteLink
+                    <Styled.RouteLink
                       component={RouterLink}
                       to={navigation.href}
                     >
                       {navigation.name}
-                    </Styles.RouteLink>
+                    </Styled.RouteLink>
                   </li>
                 ))}
               </ul>
@@ -68,12 +68,12 @@ const Header = () => {
         ) : (
           <>
             <Search lgScreen={lgScreen} />
-            <Styles.Btn color="secondary" variant="contained">
+            <Styled.Btn color="secondary" variant="contained">
               register
-            </Styles.Btn>
+            </Styled.Btn>
           </>
         )}
-      </Styles.StackCont>
+      </Styled.StackCont>
       {!lgScreen && (
         <MobileDrawer openMenu={openMenu} setOpenMenu={setOpenMenu} />
       )}

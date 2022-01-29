@@ -10,7 +10,6 @@ import {
   STATUS,
   FETCHTB,
   FETCHCB,
-  FETCHLB,
   READ_PROD_DET_REQUEST,
   READ_PROD_DET_SUCCESS,
   READ_PROD_DET_FAIL,
@@ -108,21 +107,6 @@ export const fetchCurrentBidder = (body) => async (dispatch) => {
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: FETCHCB, payload: { bidder: data } });
-    });
-  } catch (error) {
-    logError(error, dispatch);
-  }
-};
-//get last bidder
-export const fetchLastBidder = (body) => async (dispatch) => {
-  try {
-    dispatch({ type: LOADING, payload: { status: 1 } });
-    //fetch top bidder
-    const { data } = await api.fetchLastBidder(body);
-
-    batch(() => {
-      dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: FETCHLB, payload: { bidder: data } });
     });
   } catch (error) {
     logError(error, dispatch);

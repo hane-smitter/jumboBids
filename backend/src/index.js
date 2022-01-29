@@ -1,10 +1,6 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
-import fs from "fs";
-import http from "http";
-import https from "https";
-import cron from "node-cron";
 import chalk from "chalk";
 import { fileURLToPath } from "url";
 import compression from "compression";
@@ -13,7 +9,8 @@ import { DB } from "./db/mongoose.js";
 import routes from "./routes/index.js";
 import { errorHandler } from "./_helpers/error/error-handler.js";
 import ErrorRes from "./_helpers/error/ErrorResponse.js";
-import { updateBidabbles } from "./controllers/admin/bids.js";
+// import { updateBidabbles } from "./controllers/admin/bids.js";
+import connectCacheSevice from "./db/services/cache.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +22,8 @@ var options = {
 };
 
 const app = express();
+
+connectCacheSevice();
 
 app.use(compression());
 app.use(cors());
@@ -54,6 +53,6 @@ app.use(errorHandler);
 DB.on("connected", function () {
   console.log(chalk.rgb(208, 60, 240)("DB is connected"));
   app.listen(PORT, () =>
-      console.log(chalk.rgb(208, 60, 240)(`Server listening on port: ${PORT}`))
-    );
+    console.log(chalk.rgb(208, 60, 240)(`Server listening on port: ${PORT}`))
+  );
 });

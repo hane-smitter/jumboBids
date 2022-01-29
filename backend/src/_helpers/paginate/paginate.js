@@ -12,7 +12,10 @@ function paginate() {
   const prevPage = parseInt(hashids.decode(prevPageToken).join(""));
   const currentPage = nextPage || prevPage || 1;
 
-  if (!maxResults) maxResults = 20;
+  console.log("NXT PGTOKEN RECEIVED: ", nextPageToken);
+  console.log("Current PAGE: ", currentPage);
+
+  if (!maxResults) maxResults = 4;
 
   const limit = maxResults;
   const skip = (currentPage - 1) * limit;
@@ -20,7 +23,7 @@ function paginate() {
   const totalPages = Math.ceil((totalResults / limit) || 1);
 
   nextPageToken = hashids.encode(
-    currentPage + 1 < totalPages ? currentPage + 1 : 1
+    currentPage + 1 <= totalPages ? currentPage + 1 : 1
   );
   prevPageToken = hashids.encode(currentPage - 1 > 0 ? currentPage - 1 : 1);
 

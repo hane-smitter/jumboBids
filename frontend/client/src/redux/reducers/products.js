@@ -6,11 +6,11 @@ import {
   LOADING,
   STATUS,
   FETCHTB,
-  FETCHLB,
   FETCHCB,
   READ_PROD_DET_SUCCESS,
   READ_PROD_DET_REQUEST,
   READ_PROD_DET_FAIL,
+  SET_ACTIVE_CATEGORY
 } from "../constants";
 
 export const app = (
@@ -18,11 +18,7 @@ export const app = (
     products: [],
     status: {},
     categories: [],
-    /* bidder: {
-      topBidder: {},
-    },
-    lastBidder: {},
-    currentBidders: [], */
+    activeCategory: "All",
     loading: false,
     err: [],
   },
@@ -60,10 +56,10 @@ export const app = (
         ...app,
         bidder: { ...app.bidder, topBidder: payload.bidder },
       };
-    case FETCHLB:
+    case SET_ACTIVE_CATEGORY:
       return {
         ...app,
-        lastBidder: payload.bidder,
+        activeCategory: payload,
       };
     case FETCHCB:
       return {

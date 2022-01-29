@@ -76,7 +76,6 @@ AuthUserSchema.statics.findByCredentials = async (email, password) => {
   const user = await AuthUser.findOne({ email });
   if (!user) throw new ErrorResponse("Wrong credentials", 400);
   const passwdMatch = await bcrypt.compare(password, user.password);
-  // console.log(passwdMatch);
   if (!passwdMatch) throw new ErrorResponse("Wrong credentials", 400);
   return user;
 };

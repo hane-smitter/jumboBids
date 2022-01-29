@@ -1,5 +1,12 @@
 import { styled } from "@mui/system";
-import { Card, Box, Stack, CardHeader, Typography } from "@mui/material";
+import {
+  Card,
+  Box,
+  Stack,
+  CardHeader,
+  Typography,
+  CardContent,
+} from "@mui/material";
 
 const CardRoot = styled(Card)(({ theme }) => ({
   backgroundColor: theme.palette.common.white,
@@ -30,13 +37,18 @@ const CardHeading = styled(CardHeader)`
 const CardHeadingText = styled(Typography)`
   color: #545a63;
   text-transform: uppercase;
+  text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   font-size: ${({ theme }) => theme.typography.pxToRem(15)};
   font-weight: ${({ theme }) => theme.typography.fontWeightMedium};
+`;
+const CardContentData = styled(CardContent)`
+  padding: 0;
+  display: grid;
+  justify-items: center;
+  grid-auto-columns: 100%;
 `;
 
 const styles = {
@@ -44,7 +56,8 @@ const styles = {
   SectionImage,
   SectionContent,
   CardHeading,
-  CardHeadingText
+  CardHeadingText,
+  CardContentData
 };
 
 export default styles;

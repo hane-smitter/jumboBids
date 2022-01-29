@@ -14,7 +14,7 @@ import reducers from './reducers';
 import App from './App';
 
 const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)));
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = 'http://localhost:5000/api/a';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 ReactDOM.render(

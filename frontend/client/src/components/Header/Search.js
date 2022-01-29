@@ -2,7 +2,7 @@ import React from "react";
 import { FormControl, InputAdornment, Stack } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 
-import Styles from "./Styles";
+import Styled from "./Styled";
 
 const Search = ({ lgScreen }) => {
   return (
@@ -15,7 +15,7 @@ const Search = ({ lgScreen }) => {
     >
       <FormControl>
         {lgScreen ? (
-          <Styles.SearchInput
+          <Styled.SearchInput
             color="secondary"
             placeholder="Search inventory by model, name and more..."
             disableUnderline={true}
@@ -26,7 +26,7 @@ const Search = ({ lgScreen }) => {
             }
           />
         ) : (
-          <Styles.SearchInput
+          <Styled.SearchInput
             color="secondary"
             placeholder="Search inventory by model, name and more..."
             disableUnderline={true}
@@ -34,9 +34,9 @@ const Search = ({ lgScreen }) => {
           />
         )}
       </FormControl>
-      <Styles.Btn search color="secondary" variant="contained">
+      <Styled.Btn search="1" color="secondary" variant="contained">
         {lgScreen ? "Search Inventory" : <SearchIcon />}
-      </Styles.Btn>
+      </Styled.Btn>
     </Stack>
   );
 };
