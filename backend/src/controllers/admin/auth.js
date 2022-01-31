@@ -81,6 +81,7 @@ export const login = async (req, res, next) => {
     const user = await AuthUser.findByCredentials(email, password);
     const token = await user.generateAuthToken();
 
+
     res.json({
       status: {
         info: {
@@ -92,6 +93,7 @@ export const login = async (req, res, next) => {
       },
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

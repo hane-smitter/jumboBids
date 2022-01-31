@@ -12,7 +12,7 @@ function paginate() {
   const prevPage = parseInt(hashids.decode(prevPageToken).join(""));
   const currentPage = nextPage || prevPage || 1;
 
-  if (!maxResults) maxResults = 20;
+  if (!maxResults) maxResults = 4;
 
   const limit = maxResults;
   const skip = (currentPage - 1) * limit;

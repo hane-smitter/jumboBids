@@ -21,7 +21,8 @@ const Home = () => {
   }, []);
   React.useEffect(() => {
     setBidProducts(app);
-  }, [app]);
+    console.log("hello products app changed");
+  }, [dispatch, app]);
 
   const updateProducts = (query, type) => {
     dispatch(getProducts(query, type));

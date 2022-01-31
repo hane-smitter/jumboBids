@@ -22,6 +22,7 @@ const Products = (props) => {
   const dispatch = useDispatch();
   const [categoryOpen, setCategoryOpen] = React.useState(false);
   const [loadMore, setLoadMore] = React.useState(true);
+  console.log("LOADMORE: ", loadMore);
 
   const fetchMoreProducts = () => {
     updateProducts({ nextPageToken }, "secondary");
@@ -38,6 +39,8 @@ const Products = (props) => {
     if (products?.length && pageInfo?.totalResults) {
       if (products?.length >= pageInfo.totalResults) {
         setLoadMore((_) => false);
+      } else {
+        setLoadMore((_) => true);
       }
     }
   }, [products]);
@@ -118,6 +121,7 @@ const Products = (props) => {
       <InfiniteScroll
         dataLength={products?.length || 0}
         next={fetchMoreProducts}
+        style={{ overflowY: "hidden" }}
         hasMore={loadMore}
         loader={
           <Stack>
