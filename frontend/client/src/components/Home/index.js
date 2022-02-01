@@ -6,6 +6,7 @@ import Banner from "../Banners/Home";
 import Products from "../Products/Products";
 import { getProducts } from "../../redux/actions/products";
 import { unsetErr } from "../../redux/actions/errors.js";
+import { SET_ACTIVE_CATEGORY } from "../../redux/constants/index.js";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -27,12 +28,22 @@ const Home = () => {
   const updateProducts = (query, type) => {
     dispatch(getProducts(query, type));
   };
+  const updateActiveCategory = (category) => {
+    dispatch({
+      type: SET_ACTIVE_CATEGORY,
+      payload: category,
+    });
+  };
 
   return (
     <>
       <Banner />
 
-      <Products updateProducts={updateProducts} bidProducts={bidProducts} />
+      <Products
+        updateProducts={updateProducts}
+        updateActiveCategory={updateActiveCategory}
+        bidProducts={bidProducts}
+      />
     </>
   );
 };

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Close as CloseIcon } from "@mui/icons-material";
 
 import { navigations } from "./NavItems";
-import Styles from "./Styles";
+import Styled from "./Styled";
 
 const MobileDrawer = ({ openMenu, setOpenMenu }) => {
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ const MobileDrawer = ({ openMenu, setOpenMenu }) => {
             </ListItem>
           ))}
           <ListItem>
-            <Styles.Btn fullWidth>sign in</Styles.Btn>
+            <Styled.Btn fullWidth>sign in</Styled.Btn>
           </ListItem>
         </List>
       </SwipeableDrawer>

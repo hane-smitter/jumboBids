@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import {
   Typography,
   Grid,
@@ -11,15 +10,23 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CategoryIcon from "@mui/icons-material/Category";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { decode } from "html-entities";
+import { dispatch } from "react-redux";
 
 import Product from "./Product/Product";
 import Styled from "./Styled";
 
 const Products = (props) => {
-  const { products, categories, pageInfo, nextPageToken } = props.bidProducts;
-  const { updateProducts } = props;
+  const {
+    products,
+    loading,
+    err,
+    categories,
+    activeCategory,
+    pageInfo,
+    nextPageToken,
+  } = props.bidProducts;
+  const { updateProducts, updateActiveCategory } = props;
 
-  const dispatch = useDispatch();
   const [categoryOpen, setCategoryOpen] = React.useState(false);
   const [loadMore, setLoadMore] = React.useState(true);
   console.log("LOADMORE: ", loadMore);
@@ -35,6 +42,7 @@ const Products = (props) => {
     setCategoryOpen(!categoryOpen);
   };
 
+  // React.useEffect(() => {}, []);
   React.useEffect(() => {
     if (products?.length && pageInfo?.totalResults) {
       if (products?.length >= pageInfo.totalResults) {
@@ -71,7 +79,10 @@ const Products = (props) => {
                 letterSpacing: 0,
               }}
               secondary={categories
-                ?.slice(0, Math.ceil(categories.length * 0.3))
+                ?.slice(
+                  0,
+                  Math.ceil(Math.min(Math.max(categories.length * 0.3, 4), 10))
+                )
                 ?.map((category) => `${decode(category.name)}, `)}
               secondaryTypographyProps={{
                 noWrap: true,
@@ -90,11 +101,20 @@ const Products = (props) => {
           </Styled.CBListItem>
         </Styled.CBList>
         <Styled.CBCollapse in={categoryOpen} timeout="auto" unmountOnExit>
-          <Styled.CBList component="div">
+          <Styled.CBList
+            sx={{
+              height: "100%",
+              boxSizing: "content-box",
+              overflowY: "auto",
+              padding: "0 20px 0 0",
+            }}
+            component="div"
+          >
             <Styled.CBListItem
               button
               onClick={() => {
                 setCategoryOpen(false);
+                updateActiveCategory("All");
                 updateProducts();
               }}
             >
@@ -106,6 +126,7 @@ const Products = (props) => {
                 key={category._id}
                 onClick={() => {
                   setCategoryOpen(false);
+                  updateActiveCategory(decode(category.name));
                   updateProducts({ category: category.category_slug });
                 }}
               >
@@ -121,18 +142,31 @@ const Products = (props) => {
       <InfiniteScroll
         dataLength={products?.length || 0}
         next={fetchMoreProducts}
-        style={{ overflowY: "hidden" }}
+        style={{ overflowY: "hidden!important" }}
         hasMore={loadMore}
         loader={
           <Stack>
-            <CircularProgress
-              disableShrink
-              sx={{ color: "yellow", m: "auto" }}
-            />
+            {loading && (
+              <CircularProgress
+                disableShrink
+                sx={{ color: "secondary.dark", m: "auto" }}
+              />
+            )}
+            {err?.length > 0 && !loading && (
+              <Typography variant="body2" sx={{ m: "auto" }}>
+                {err[0].msg}
+              </Typography>
+            )}
           </Stack>
         }
         endMessage={
-          <p style={{ textAlign: "center", color: "rgba(255,255,255,0.6)" }}>
+          <p
+            style={{
+              textAlign: "center",
+              color: "rgba(255,255,255,0.6)",
+              userSelect: "none",
+            }}
+          >
             <strong>More coming soon... 🔥</strong>
           </p>
         }
@@ -144,13 +178,36 @@ const Products = (props) => {
           <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
         }
       >
-        {!products?.length ? (
+        {!loading && (
+          <Stack>
+            <Typography
+              sx={{
+                textTransform: "capitalize",
+                m: "auto",
+                fontWeight: "fontWeightBold",
+                color: "common.black",
+                my: 2,
+              }}
+              variant="h5"
+            >
+              {activeCategory === "All" ? "all products" : activeCategory}
+            </Typography>
+          </Stack>
+        )}
+        {!products?.length || !products[0]?.product ? (
           <Typography
             variant="h5"
             color="textSecondary"
             align="center"
-            component="p"
-            sx={{ bgcolor: "background.paper", p: 5 }}
+            component="div"
+            sx={{
+              bgcolor: "background.paper",
+              p: 5,
+              borderRadius: "4px",
+              boxShadow: `inset 0 0 4px 3px hsl(0deg 0% 90%),
+              inset 0 0 4px 6px hsl(0deg 0% 90%),
+              inset 0 0 1px 7px hsl(0deg 0% 60%)`,
+            }}
           >
             Sorry! No Products are available!!
           </Typography>
@@ -162,6 +219,14 @@ const Products = (props) => {
             spacing={3}
             style={{ marginBlock: 20, marginBlockEnd: 40 }}
           >
+            {products?.length > 0 && loading && (
+              <Stack>
+                <CircularProgress
+                  disableShrink
+                  sx={{ color: "secondary.dark", m: "auto" }}
+                />
+              </Stack>
+            )}
             {products?.map((product) => {
               let content = null;
               if (Boolean(product?.product)) {

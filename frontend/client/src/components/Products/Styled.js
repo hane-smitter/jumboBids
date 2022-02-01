@@ -24,7 +24,7 @@ const CBCollapse = styled(Collapse)(({ theme }) => ({
   position: "absolute",
   backgroundColor: "#486391",
   zIndex: 10,
-  overflow: "auto",
+  overflow: "hidden",
   maxHeight: 300,
   top: "100%",
 }));
