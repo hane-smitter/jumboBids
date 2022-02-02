@@ -10,7 +10,7 @@ import {
   READ_PROD_DET_SUCCESS,
   READ_PROD_DET_REQUEST,
   READ_PROD_DET_FAIL,
-  SET_ACTIVE_CATEGORY
+  SET_ACTIVE_CATEGORY,
 } from "../constants";
 
 export const app = (
@@ -18,7 +18,7 @@ export const app = (
     products: [],
     status: {},
     categories: [],
-    activeCategory: "All",
+    activeCategory: { name: "All" },
     loading: false,
     err: [],
   },

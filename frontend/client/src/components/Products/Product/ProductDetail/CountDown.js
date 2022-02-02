@@ -6,7 +6,7 @@ import FutureTimeCalc from "../../../utils/FutureTimeCalc";
 
 const CountDownBox = styled(Box)`
   margin-block-end: 10px;
-  span:first-child {
+  span:first-of-type {
     margin-inline-start: 0;
   }
 `;
@@ -14,12 +14,12 @@ const Time = styled(Typography)`
   width: 2ch;
   margin-inline-start: 10px;
   color: ${({ theme, danger }) =>
-    danger ? "red" : theme.palette.common.black};
+    danger.toLowerCase() === "true" ? "red" : theme.palette.common.black};
 `;
 const Text = styled(Typography)`
   text-transform: lowercase;
   color: ${({ theme, danger }) =>
-    danger ? "red" : theme.palette.common.black};
+    danger.toLowerCase() === "true" ? "red" : theme.palette.common.black};
 `;
 
 const CountDown = ({ product, nearEnd }) => {
@@ -46,31 +46,31 @@ const CountDown = ({ product, nearEnd }) => {
 
   return (
     <CountDownBox>
-      <Time variant="caption" danger={nearEnd}>
+      <Time variant="caption" danger={nearEnd.toString()}>
         {countDownTime.days}
       </Time>
-      <Text variant="body2" component="span" danger={nearEnd}>
+      <Text variant="body2" component="span" danger={nearEnd.toString()}>
         Days
       </Text>
 
-      <Time variant="caption" danger={nearEnd}>
+      <Time variant="caption" danger={nearEnd.toString()}>
         {countDownTime.hours}
       </Time>
-      <Text variant="body2" component="span" danger={nearEnd}>
+      <Text variant="body2" component="span" danger={nearEnd.toString()}>
         Hrs
       </Text>
 
-      <Time variant="caption" danger={nearEnd}>
+      <Time variant="caption" danger={nearEnd.toString()}>
         {countDownTime.minutes}
       </Time>
-      <Text variant="body2" component="span" danger={nearEnd}>
+      <Text variant="body2" component="span" danger={nearEnd.toString()}>
         Mins
       </Text>
 
-      <Time variant="caption" danger={nearEnd}>
+      <Time variant="caption" danger={nearEnd.toString()}>
         {countDownTime.seconds}
       </Time>
-      <Text variant="body2" component="span" danger={nearEnd}>
+      <Text variant="body2" component="span" danger={nearEnd.toString()}>
         Sec
       </Text>
     </CountDownBox>

@@ -1,5 +1,4 @@
 import React from "react";
-import { Grow } from "@mui/material";
 import { styled } from "@mui/system";
 import { Outlet } from "react-router-dom";
 
@@ -21,15 +20,13 @@ const ContentContainer = styled("div")`
 
 const Layout = () => {
   return (
-    <Grow in>
-      <Container>
-        <Header />
-        <ContentContainer>
-          <Outlet />
-        </ContentContainer>
-        <Footer />
-      </Container>
-    </Grow>
+    <Container>
+      <Header />
+      <ContentContainer>
+        <Outlet />
+      </ContentContainer>
+      <Footer />
+    </Container>
   );
 };
 

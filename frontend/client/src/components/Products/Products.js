@@ -6,11 +6,13 @@ import {
   Stack,
   useMediaQuery,
 } from "@mui/material";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import CategoryIcon from "@mui/icons-material/Category";
+import {
+  Category as CategoryIcon,
+  ArrowDropUp as ArrowDropUpIcon,
+  RefreshOutlined as RefreshIcon,
+} from "@mui/icons-material";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { decode } from "html-entities";
-import { dispatch } from "react-redux";
 
 import Product from "./Product/Product";
 import Styled from "./Styled";
@@ -35,7 +37,7 @@ const Products = (props) => {
     updateProducts({ nextPageToken }, "secondary");
   };
   const refreshProducts = () => {
-    updateProducts();
+    updateProducts(undefined, undefined, "refresh");
   };
 
   const handleCategoryClick = () => {
@@ -126,7 +128,10 @@ const Products = (props) => {
                 key={category._id}
                 onClick={() => {
                   setCategoryOpen(false);
-                  updateActiveCategory(decode(category.name));
+                  updateActiveCategory(
+                    decode(category.name),
+                    category.category_slug
+                  );
                   updateProducts({ category: category.category_slug });
                 }}
               >
@@ -175,25 +180,73 @@ const Products = (props) => {
         pullDownToRefresh
         pullDownToRefreshThreshold={50}
         releaseToRefreshContent={
-          <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+          <Typography
+            variant="h6"
+            sx={{
+              textAlign: "center",
+              color: "secondary.light",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: "tooltip",
+            }}
+          >
+            <RefreshIcon sx={{ mr: 1 }} /> Release to refresh
+          </Typography>
         }
       >
-        {!loading && (
-          <Stack>
-            <Typography
+        <Stack sx={{ position: "relative" }}>
+          <Typography
+            sx={{
+              textTransform: "capitalize",
+              minHeight: 40,
+              m: "auto",
+              fontWeight: "fontWeightBold",
+              color: "common.black",
+              my: 2,
+            }}
+            variant="h5"
+          >
+            {!loading
+              ? activeCategory?.name === "All"
+                ? "all products"
+                : activeCategory?.name
+              : ""}
+          </Typography>
+          {
+            products?.length > 0 && loading && <Stack
               sx={{
-                textTransform: "capitalize",
-                m: "auto",
-                fontWeight: "fontWeightBold",
-                color: "common.black",
-                my: 2,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: "tooltip",
               }}
-              variant="h5"
             >
-              {activeCategory === "All" ? "all products" : activeCategory}
-            </Typography>
-          </Stack>
-        )}
+              <span
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "50%",
+                  transform: "translate(-50%, -50%)",
+                  height: 34,
+                  width: 34,
+                }}
+              >
+                <CircularProgress
+                  disableShrink
+                  size={"small"}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    color: "secondary.dark",
+                  }}
+                />
+              </span>
+            </Stack>
+          }
+        </Stack>
         {!products?.length || !products[0]?.product ? (
           <Typography
             variant="h5"
@@ -212,41 +265,35 @@ const Products = (props) => {
             Sorry! No Products are available!!
           </Typography>
         ) : (
-          <Grid
-            container
-            justifyContent={isMobile ? "space-around" : "left"}
-            alignItems="stretch"
-            spacing={3}
-            style={{ marginBlock: 20, marginBlockEnd: 40 }}
-          >
-            {products?.length > 0 && loading && (
-              <Stack>
-                <CircularProgress
-                  disableShrink
-                  sx={{ color: "secondary.dark", m: "auto" }}
-                />
-              </Stack>
-            )}
-            {products?.map((product) => {
-              let content = null;
-              if (Boolean(product?.product)) {
-                content = (
-                  <Grid
-                    style={{ maxWidth: 250 }}
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    key={product._id}
-                  >
-                    <Product product={product} />
-                  </Grid>
-                );
-              }
-              return content;
-            })}
-          </Grid>
+          <>
+            <Grid
+              container
+              justifyContent={isMobile ? "space-around" : "left"}
+              alignItems="stretch"
+              spacing={3}
+              style={{ marginBlockEnd: 40 }}
+            >
+              {products?.map((product) => {
+                let content = null;
+                if (Boolean(product?.product)) {
+                  content = (
+                    <Grid
+                      style={{ maxWidth: 250 }}
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      key={product._id}
+                    >
+                      <Product product={product} />
+                    </Grid>
+                  );
+                }
+                return content;
+              })}
+            </Grid>
+          </>
         )}
       </InfiniteScroll>
     </>

@@ -12,9 +12,18 @@ const Home = () => {
   const dispatch = useDispatch();
   const app = useSelector((state) => state.app);
   const [bidProducts, setBidProducts] = React.useState({});
+  const activeCategory = useSelector((state) => state.app.activeCategory);
 
   React.useEffect(() => {
-    dispatch(getProducts());
+    let cat;
+    if (activeCategory.name !== "All") {
+      cat = { category: activeCategory?.slug };
+    }
+    dispatch(getProducts(cat));
+    dispatch({
+      type: SET_ACTIVE_CATEGORY,
+      payload: { name: activeCategory?.name },
+    });
     return () => {
       dispatch(unsetErr());
       window.scroll(0, 0);
@@ -22,18 +31,24 @@ const Home = () => {
   }, []);
   React.useEffect(() => {
     setBidProducts(app);
-    console.log("hello products app changed");
   }, [dispatch, app]);
 
-  const updateProducts = (query, type) => {
+  const updateProducts = React.useCallback((query, type, refresh) => {
     dispatch(getProducts(query, type));
-  };
-  const updateActiveCategory = (category) => {
+    if (refresh) {
+      dispatch({
+        type: SET_ACTIVE_CATEGORY,
+        payload: { name: "All" },
+      });
+    }
+  }, []);
+
+  const updateActiveCategory = React.useCallback((name, slug) => {
     dispatch({
       type: SET_ACTIVE_CATEGORY,
-      payload: category,
+      payload: { name, slug },
     });
-  };
+  }, []);
 
   return (
     <>
